@@ -47,7 +47,7 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
     //moves all rectangles right or left by amount. units are in ratio to monitor
 
     private final int rows = 640;
-    private final int cols = 480;
+    private final int cols = 360;
 
     OpenCvCamera phoneCam;
 

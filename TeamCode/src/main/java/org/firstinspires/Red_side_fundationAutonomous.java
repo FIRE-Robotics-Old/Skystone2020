@@ -66,7 +66,8 @@ Red_side_fundationAutonomous extends LinearOpMode  {
     private DcMotor rightSide;
     private DcMotor middleMotor;
     private final int side = 1 ; // red = 1
-    private AutoDrivingSecondTry ad;
+    private static AutoDrivingSecondTry ad;
+    public double powerFactor=0.8;
     @Override
 
     public void runOpMode() {
@@ -101,7 +102,7 @@ Red_side_fundationAutonomous extends LinearOpMode  {
         try {
             if(ad == null || ad.threadsStopped) {
                 ad = new AutoDrivingSecondTry(robot.leftDrive, robot.rightDrive, robot.middleDrive,
-                        robot.imu, telemetry, this, frontDistanceSensor, sideDistanceSensor, new Location(0, 620));
+                        robot.imu, telemetry, this, frontDistanceSensor, sideDistanceSensor, new Location( 620,0));
             }
 //            ad.setPosition(new Location(800, 450),
 //                    -90, 100, 200, 5, 30, 0.8);
@@ -161,15 +162,15 @@ Red_side_fundationAutonomous extends LinearOpMode  {
 //            ad.stopAllAutoCalculations();
 
 
-            ad.setPosition(new Location(side*800, 350),
-                    -90*side, 70, 400, 5, 30, 0.5);
+            ad.setPosition(new Location( 350,side*(-800)),
+                    0*side, 70, 200, 5, 30, powerFactor);
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 300)
+            while(runtime.milliseconds() < 500)
             {
-                leftSide.setPower(0.4);
-                rightSide.setPower(0.4);
+                leftSide.setPower(powerFactor);
+                rightSide.setPower(powerFactor);
             }
 
 
@@ -189,25 +190,25 @@ Red_side_fundationAutonomous extends LinearOpMode  {
             while(runtime.milliseconds() < 1000){ }
 
 
-            ad.DriveToWall(-90*side, 5, 30, 0.6, 250);
+            ad.DriveToWall(0*side, 5, 30, powerFactor, 250);
 
             //test
-            ad.setPosition(new Location(550*side ,600) ,0, 50 ,300 ,10 ,40 ,0.5);
+            ad.setPosition(new Location(600*side ,-600) ,90, 70 ,200 ,10 ,20 ,powerFactor);
         //    ad.setPosition(new Location(700, 400), 0 , 50 ,300 ,10 ,20 ,0.5);
 
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 1000)
+            while(runtime.milliseconds() < 1500)
             {
-                leftSide.setPower(0.4);
-                rightSide.setPower(0.4);
+                leftSide.setPower(1);
+                rightSide.setPower(1);
             }
 
             leftSide.setPower(0);
             rightSide.setPower(0);
 
-            ad.updateYAxis(465);
+            ad.updateXAxis(465);
 
 //
 //
@@ -230,12 +231,12 @@ Red_side_fundationAutonomous extends LinearOpMode  {
             while(runtime.milliseconds() < 500){}
 
 
-            ad.setPosition(new Location(200*side, 1500),
-                    0, 100, 300, 10, 30, 0.3);
+            ad.setPosition(new Location(1500, 200*side),
+                    90, 100, 300, 10, 30, powerFactor);
 
             leftExpantion.setPosition(0);
 
-            ad.stopAllAutoCalculations();
+       //     ad.stopAllAutoCalculations();
             org.firstinspires.ftc.teamcode.Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 90;
 
         }
