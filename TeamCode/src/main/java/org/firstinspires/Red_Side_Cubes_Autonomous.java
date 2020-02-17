@@ -10,14 +10,13 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.Location;
 
 
-@Autonomous(name="Cubes Autonomous", group="Pushbot")
+@Autonomous(name="Red_Side_Cubes_Autonomous", group="Pushbot")
 
 
-public class cubesAutonomous extends LinearOpMode {
+public class Red_Side_Cubes_Autonomous extends LinearOpMode {
 
     /**
      * Declare on the parts
@@ -34,7 +33,8 @@ public class cubesAutonomous extends LinearOpMode {
     private DcMotor rightSide;
     private DcMotor middleMotor;
     private DcMotor gripperMotor;
-    private DcMotor cubesMotor;
+    private DcMotor rightStone;
+    private DcMotor leftStone;
     private double stoneSize = 203.2;
     private int mode = 1;
     private double fieldSide = 3660;
@@ -42,6 +42,7 @@ public class cubesAutonomous extends LinearOpMode {
     private double robotWidth = 430;
     private double robotWidthWhenOpen = 550;
     private double cubePostion = 0;
+    private double speed = 0.6;
 
     @Override
 
@@ -60,7 +61,8 @@ public class cubesAutonomous extends LinearOpMode {
         middleMotor = robot.middleDrive;
         gripperMotor = robot.gripperMotor;
         gripperServo = robot.gripperServo;
-        cubesMotor = robot.cubesMotor;
+        leftStone = robot.left_stone;
+        rightStone = robot.right_stone;
         rightSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         middleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -80,19 +82,19 @@ public class cubesAutonomous extends LinearOpMode {
  */
         try {
 
-            cubePostion = ((4) * stoneSize) - 580;
+            cubePostion = ((1) * stoneSize) - 140;
 
             ad.setPosition(new Location(cubePostion, -600),
-                    0, 70, 300, 5, 50, 0.3);
+                    0, 50, 100, 5, 50, speed);
 
 
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 500)
+            while(runtime.milliseconds() < 700)
             {
-                leftSide.setPower(0.2);
-                rightSide.setPower(0.2);
+                leftSide.setPower(0.5);
+                rightSide.setPower(0.5);
             }
 
 
@@ -105,9 +107,9 @@ public class cubesAutonomous extends LinearOpMode {
 //            gripperMotor.setPower(1);
             runtime.reset();
             while(runtime.milliseconds() < 1000) {
-                cubesMotor.setPower(-0.3);
+                leftStone.setPower(-0.5);
             }
-            cubesMotor.setPower(0);
+            leftStone.setPower(0);
 
 
 
@@ -129,34 +131,34 @@ public class cubesAutonomous extends LinearOpMode {
 
 
             ad.setPosition(new Location(cubePostion, -200),
-                    0, 50, 200, 5, 50, 0.3);
+                    0, 50, 100, 5, 50, speed);
 
 
             ad.setPosition(new Location(2000, -200),
-                    0, 200, 500, 5, 30, 0.3);
+                    -90, 100, 100, 5, 30, speed);
 
 
             ///////////////////////////////////////////////////////////////////////////////
             runtime.reset();
             while(runtime.milliseconds() < 500) {
-                cubesMotor.setPower(0.3);
+                leftStone.setPower(0.5);
             }
-            cubesMotor.setPower(0);
+            leftStone.setPower(0);
 
             ////////////////////////////////////////////////////////////////////////////////////
-            cubePostion = ((6) * stoneSize) - 580;
+            cubePostion = ((4) * stoneSize)-100;
 
             ad.setPosition(new Location(cubePostion, -600),
-                    0, 70, 300, 5, 50, 0.3);
+                    0, 70, 100, 5, 50, speed);
 
 
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 700)
+            while(runtime.milliseconds() < 800)
             {
-                leftSide.setPower(0.2);
-                rightSide.setPower(0.2);
+                leftSide.setPower(0.5);
+                rightSide.setPower(0.5);
             }
 
 
@@ -165,29 +167,29 @@ public class cubesAutonomous extends LinearOpMode {
 
             runtime.reset();
             while(runtime.milliseconds() < 1000) {
-                cubesMotor.setPower(-0.3);
+                leftStone.setPower(-0.5);
             }
-            cubesMotor.setPower(0);
+            leftStone.setPower(0);
 
             ad.setPosition(new Location(cubePostion, -200),
-                    0, 50, 200, 5, 50, 0.3);
+                    0, 50, 100, 5, 50, speed);
 
 
-            ad.setPosition(new Location(2000, -200),
-                    0, 200, 500, 5, 30, 0.3);
+            ad.setPosition(new Location(2400, -100),
+                    -90, 100, 100, 5, 30, speed);
 ///////
 
 
             runtime.reset();
             while(runtime.milliseconds() < 500) {
-                cubesMotor.setPower(0.3);
+                leftStone.setPower(0.5);
             }
-            cubesMotor.setPower(0);
+            leftStone.setPower(0);
 
             ///
 
-            ad.setPosition(new Location(1700, -200),
-                    0, 200, 500, 5, 30, 0.3);
+            ad.setPosition(new Location(1800, -200),
+                    0, 100, 100, 5, 30, 0.6);
 
 //            runtime.reset();
 //            while(runtime.milliseconds() < 1500) {
