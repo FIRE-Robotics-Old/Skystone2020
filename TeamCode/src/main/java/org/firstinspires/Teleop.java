@@ -60,7 +60,7 @@ public class Teleop extends LinearOpMode {
     private DcMotor rightSide;
     private DcMotor middleMotor;
     private DcMotor liftMotor;
-    private DcMotor parkingMotor;
+
     private BNO055IMU imu;
     private DistanceSensor liftSensor;
     private Servo gripperServo;
@@ -71,7 +71,8 @@ public class Teleop extends LinearOpMode {
     volatile boolean isClawPressed;
     volatile boolean isGripperPressed;
     volatile boolean isFourbarPressed;
-    volatile boolean isLiftPressed;
+    volatile boolean isLiftDownPressed;
+    volatile boolean isLiftUpPressed;
     boolean rollerGriperIsOpen = true;
     boolean fourbarIsOpen = true;
     boolean graberIsOpen = true;
@@ -118,7 +119,8 @@ public class Teleop extends LinearOpMode {
         isClawPressed = false;
         isFourbarPressed = false;
         isGripperPressed = false;
-        isLiftPressed = false;
+        isLiftDownPressed = false;
+        isLiftUpPressed = false;
         waitForStart();
         runtime.reset();
 /** create/init  the threads for the teleop
@@ -189,13 +191,13 @@ public class Teleop extends LinearOpMode {
                 robot.fourbarServo.setPosition(0);
                 fourbarIsOpen = true;
                 isFourbarPressed = true;
-            } else if (gamepad2.a && fourbarIsOpen) {
+            } else if (gamepad2.a && fourbarIsOpen && !isFourbarPressed) {
                 robot.fourbarServo.setPosition(1);
                 fourbarIsOpen = false;
                 isFourbarPressed = true;
             }    else if (!gamepad2.a) {
-            isFourbarPressed = false;
-        }
+               isFourbarPressed = false;
+            }
 
 
 /**
@@ -214,28 +216,28 @@ public class Teleop extends LinearOpMode {
 /**
  * move the lift up
  */
-            if (gamepad2.dpad_up && level < 6 && !isLiftPressed && !manualControl) {
+            if (gamepad2.dpad_up && level < 6 && !isLiftUpPressed && !manualControl) {
                 level++;
-                isLiftPressed = true;
+                isLiftUpPressed = true;
                 driveToPosition = true;
-            } else if (gamepad2.dpad_up && !isLiftPressed && manualControl) {
-                isLiftPressed = true;
+            } else if (gamepad2.dpad_up && !isLiftUpPressed && manualControl) {
+                isLiftUpPressed = true;
                 liftMotor.setPower(1);
             } else if (!gamepad2.dpad_up) {
-                isLiftPressed = false;
+                isLiftUpPressed = false;
             }
 
 /**
  * move the  lift down
  */
-            if (gamepad2.dpad_down && level > 0 && !isLiftPressed && !manualControl) {
+            if (gamepad2.dpad_down && level > 0 && !isLiftDownPressed && !manualControl) {
                 level--;
-                isLiftPressed = true;
+                isLiftDownPressed = true;
                 driveToPosition = true;
             } else if (gamepad2.dpad_down && manualControl) {
                 liftMotor.setPower(-1);
             } else if (!gamepad2.dpad_down) {
-                isLiftPressed = false;
+                isLiftDownPressed = false;
             }
 
 /**
@@ -243,6 +245,7 @@ public class Teleop extends LinearOpMode {
  */
             if (gamepad2.b && !manualControl) {
                 level = 0;
+                driveToPosition = true;
             }
 
 
@@ -330,14 +333,6 @@ public class Teleop extends LinearOpMode {
 /**
  * open and close the parkingMotor
  */
-            if (gamepad1.dpad_up) {
-                parkingMotor.setPower(1);
-            } else if (gamepad1.dpad_down) {
-                parkingMotor.setPower(-1);
-            } else {
-                parkingMotor.setPower(0);
-            }
-
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("angle", gyroAngle);

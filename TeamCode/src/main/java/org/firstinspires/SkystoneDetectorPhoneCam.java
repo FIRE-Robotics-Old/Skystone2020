@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -109,6 +110,92 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 //            moveDistance(0.4, 700);
 
         }
+
+    }
+
+    public static int position (LinearOpMode opMode, String colorSide) {
+        colorSide = colorSide.toLowerCase();
+        //Dimensions of Camera Pixels
+        int rows = 640;
+        int cols = 480;
+
+        //Time Elapsed
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset();
+
+
+        OpenCvCamera phoneCam;
+        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+
+        //P.S. if you're using the latest version of easyopencv, you might need to change the next line to the following:
+        //webcam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+//        webcam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);//remove this
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+
+        phoneCam.openCameraDevice();//open camera
+        phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
+        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
+        //width, height
+        //width = height in this case, because camera is in portrait mode.
+
+        while (opMode.opModeIsActive() && runtime.nanoseconds() <= 10000) {
+            if (colorSide.equals("blue")) {
+                opMode.telemetry.addData("Values", intToColor(valLeft) + "   " + intToColor(valMid) + "   " + intToColor(valRight));
+                opMode.telemetry.addData("Height", rows);
+                opMode.telemetry.addData("Width", cols);
+
+                opMode.telemetry.update();
+
+                //Block is in left position, so closest to center
+                if (valLeft == 0 && valMid == 255 && valRight == 255) {
+                    return 3;
+                }
+
+                //Block is in Middle Position
+                else if (valLeft == 255 && valMid == 0 && valRight == 255) {
+                    return 2;
+                }
+
+                //Block is in Right Position, so furthest from center
+                else if (valLeft == 255 && valMid == 255 && valRight == 0) {
+                    return 1;
+                }
+            }
+            else if (colorSide.equals("red")) {
+                opMode.telemetry.addData("Values", intToColor(valRight) + "   " + intToColor(valMid) + "   " + intToColor(valLeft));
+                opMode.telemetry.addData("Height", rows);
+                opMode.telemetry.addData("Width", cols);
+
+                opMode.telemetry.update();
+
+                //Block is in left, so furthest from center
+                if (valLeft == 0 && valMid == 255 && valRight == 255) {
+                    return 1;
+                }
+
+                //Block is in Middle Position
+                else if (valLeft == 255 && valMid == 0 && valRight == 255) {
+                    return 2;
+                }
+
+                //Block is in Right Position, so closest to Center
+                else if (valLeft == 255 && valMid == 255 && valRight == 0) {
+                    return 3;
+                }
+            }
+        }
+        //Couldn't Find it / Ran out of time
+        return -1;
+    }
+
+    public static String intToColor(int colorVal) {
+        if (colorVal == 0) {
+            return "Skystone";
+        }
+        else if (colorVal == 255) {
+            return "Stone";
+        }
+        else return "null";
     }
 
     //detection pipeline
@@ -232,11 +319,6 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
                 case detection:
                 {
                     return all;
-                }
-
-                case RAW_IMAGE:
-                {
-                    return input;
                 }
 
                 default:

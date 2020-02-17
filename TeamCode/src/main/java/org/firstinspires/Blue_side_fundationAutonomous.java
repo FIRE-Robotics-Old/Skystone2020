@@ -182,8 +182,7 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
             leftExpantion.setPosition(0);
 
           //  ad.stopAllAutoCalculations();
-            Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 90;
-
+            Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 180;
         }
         catch (Exception e)
         { telemetry.addData("error:",e.getStackTrace().toString());

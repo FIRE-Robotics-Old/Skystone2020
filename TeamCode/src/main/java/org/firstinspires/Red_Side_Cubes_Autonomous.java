@@ -10,6 +10,9 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Location;
 
 
@@ -243,6 +246,7 @@ public class Red_Side_Cubes_Autonomous extends SkystoneDetectorPhoneCam {
 //            }
 //            gripperMotor.setPower(0);
             ad.stopAllAutoCalculations();
+            Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 180;
         } catch (Exception e) {
             telemetry.addData("error:", e.getStackTrace().toString());
         }

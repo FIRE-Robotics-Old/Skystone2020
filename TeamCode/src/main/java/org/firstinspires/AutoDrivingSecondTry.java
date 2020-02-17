@@ -40,7 +40,7 @@ public class AutoDrivingSecondTry {
         private Thread targetLocationThread;
         private Thread currentLocationThread;
         private LinearOpMode linearOpMode;
-    public boolean threadsStopped = false;
+        public boolean threadsStopped = false;
 
     /**
      * the constructor
