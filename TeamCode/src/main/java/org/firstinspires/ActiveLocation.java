@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires;
 /**
  * we import process , imu , DcMotor ,angle unit ,axes order  and axes reference
  */
@@ -44,7 +44,7 @@ public class ActiveLocation implements Runnable {
      * @param imu
      * @param currentLocation
      */
-    public ActiveLocation(DcMotor motorLeft, DcMotor motorRight,  DcMotor middleMotor, BNO055IMU imu , org.firstinspires.ftc.teamcode.Location currentLocation ) {
+    public ActiveLocation(DcMotor motorLeft, DcMotor motorRight,  DcMotor middleMotor, BNO055IMU imu , Location currentLocation ) {
         this.motorLeft = motorLeft;
         this.motorRight = motorRight;
         this.middleMotor = middleMotor;

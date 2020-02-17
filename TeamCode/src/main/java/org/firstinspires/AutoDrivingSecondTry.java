@@ -15,8 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.ActiveLocation;
-import org.firstinspires.ftc.teamcode.Location;
+import org.firstinspires.ActiveLocation;
+import org.firstinspires.Location;
 import org.firstinspires.functions.driveFunction1;
 import org.firstinspires.functions.driveProportional;
 import org.firstinspires.functions.gyroFunction1;
@@ -153,7 +153,7 @@ public class AutoDrivingSecondTry {
      * @param slowAngle
      * @param Vmax
      */
-        public void setPosition(org.firstinspires.ftc.teamcode.Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax){
+        public void setPosition(Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax){
             try {
                 telemetry.addData("Begining is Active still alive: ", currentLocationThread.isAlive());
                 telemetry.addData("Begining is finder still alive:", targetLocationThread.isAlive());

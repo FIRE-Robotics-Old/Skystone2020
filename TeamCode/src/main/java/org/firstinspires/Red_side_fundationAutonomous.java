@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires ;
+package org.firstinspires;
 /**
         *In this section we import  imu ,Autonomous ,LinearOpMode Servo and ElapsedTime
 */
@@ -44,7 +44,7 @@ import org.firstinspires.AutoDrivingSecondTry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.Location;
+import org.firstinspires.Location;
 
 /**
  * we set up the name of the Autonomous

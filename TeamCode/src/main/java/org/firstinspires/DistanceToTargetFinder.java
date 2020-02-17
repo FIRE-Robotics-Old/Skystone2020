@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-import org.firstinspires.ftc.teamcode.ActiveLocation;
-import org.firstinspires.ftc.teamcode.Location;
+import org.firstinspires.ActiveLocation;
+import org.firstinspires.Location;
 
 public class DistanceToTargetFinder implements Runnable{
     /**
