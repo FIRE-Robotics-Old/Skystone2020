@@ -33,8 +33,8 @@ public class AutoDrivingSecondTry {
         private DistanceSensor frontDistanceSensor;
         private Telemetry telemetry;
         private ElapsedTime runtime = new ElapsedTime();
-        private org.firstinspires.ftc.teamcode.DistanceToTargetFinder distanceToTargetFinder;
-        private org.firstinspires.ftc.teamcode.ActiveLocation activeLocation;
+        private DistanceToTargetFinder distanceToTargetFinder;
+        private ActiveLocation activeLocation;
         private driveProportional driveProportional;
         private gyroProportional gyroProportional;
         private Thread targetLocationThread;
@@ -71,7 +71,7 @@ public class AutoDrivingSecondTry {
             currentLocationThread = new Thread(activeLocation);
             currentLocationThread.start();
 
-            distanceToTargetFinder = new org.firstinspires.ftc.teamcode.DistanceToTargetFinder(activeLocation, imu);
+            distanceToTargetFinder = new DistanceToTargetFinder(activeLocation, imu);
             targetLocationThread = new Thread(distanceToTargetFinder);
             targetLocationThread.start();
         }

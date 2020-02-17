@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires;
 /**
  *In this section we import gyro,AngleUnit,AxesOrder and AxesReference
  */
@@ -54,14 +54,16 @@ public class DistanceToTargetFinder implements Runnable{
 
     public void DistanceAxisMeasurement( ){
         synchronized (this) {
-            double GyroAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+            if(activeLocation!=null && newPoint!=null) {
+                double GyroAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
-            double deltaX = newPoint.getX_axis() - activeLocation.getX_Axis();
-            double deltaY = newPoint.getY_axis() - activeLocation.getY_Axis();
+                double deltaX = newPoint.getX_axis() - activeLocation.getX_Axis();
+                double deltaY = newPoint.getY_axis() - activeLocation.getY_Axis();
 
 
-            distanceTotarget[1] = (-(deltaX * Math.sin(Math.toRadians(GyroAngle))) + deltaY * Math.cos(Math.toRadians(GyroAngle)));
-            distanceTotarget[0] = deltaX * Math.cos(Math.toRadians(GyroAngle)) + deltaY * Math.sin(Math.toRadians(GyroAngle));
+                distanceTotarget[1] = (-(deltaX * Math.sin(Math.toRadians(GyroAngle))) + deltaY * Math.cos(Math.toRadians(GyroAngle)));
+                distanceTotarget[0] = deltaX * Math.cos(Math.toRadians(GyroAngle)) + deltaY * Math.sin(Math.toRadians(GyroAngle));
+            }
         }
 
     }

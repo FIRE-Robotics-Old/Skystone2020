@@ -55,7 +55,7 @@ public class
 Red_side_fundationAutonomous extends LinearOpMode  {
 
     /** Declare on the parts  */
-    org.firstinspires.ftc.teamcode.Hardware robot = new org.firstinspires.ftc.teamcode.Hardware();
+    Hardware robot = new Hardware();
     private ElapsedTime runtime = new ElapsedTime();
     private BNO055IMU imu;
     private Servo fundationHolder;
@@ -67,7 +67,7 @@ Red_side_fundationAutonomous extends LinearOpMode  {
     private DcMotor middleMotor;
     private final int side = 1 ; // red = 1
     private static AutoDrivingSecondTry ad;
-    public double powerFactor=0.8;
+    public double powerFactor = 0.8;
     @Override
 
     public void runOpMode() {
@@ -237,7 +237,7 @@ Red_side_fundationAutonomous extends LinearOpMode  {
             leftExpantion.setPosition(0);
 
        //     ad.stopAllAutoCalculations();
-            org.firstinspires.ftc.teamcode.Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 90;
+            Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 90;
 
         }
         catch (Exception e)
