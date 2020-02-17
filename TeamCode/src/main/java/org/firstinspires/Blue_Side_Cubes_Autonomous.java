@@ -54,6 +54,7 @@ public class Blue_Side_Cubes_Autonomous extends LinearOpMode {
  */
         robot.init(hardwareMap);
         int cubeLocation = SkystoneDetectorPhoneCam.position(this,"blue");
+        cubeLocation = 4 - cubeLocation;
 
         imu = robot.imu;
         fundationHolder = robot.fundationHolder;
@@ -80,13 +81,13 @@ public class Blue_Side_Cubes_Autonomous extends LinearOpMode {
                 robot.imu, telemetry, this, frontDistanceSensor, sideDistanceSensor,
                 new Location(-620, 0));
 
-        waitForStart();
+      //  waitForStart();
 /**
  * we set up the path
  */
         try {
             rightStone.setPower(0);
-            cubePostion = ((1) * stoneSize)-180;
+            cubePostion = ((cubeLocation) * stoneSize)-180;
 
             ad.setPosition(new Location(side*cubePostion+120 , -600),
                     0, 40, 200, 5, 0, speed);
@@ -150,7 +151,7 @@ public class Blue_Side_Cubes_Autonomous extends LinearOpMode {
 
 
             ////////////////////////////////////////////////////////////////////////////////////
-            cubePostion = ((4) * stoneSize);
+            cubePostion = ((cubeLocation + 3) * stoneSize);
 
             ad.setPosition(new Location(side*cubePostion+120, -600),
                     0, 50, 200, 5, 30, speed);
