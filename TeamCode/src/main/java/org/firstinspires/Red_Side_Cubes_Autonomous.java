@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Location;
 @Autonomous(name="Red_Side_Cubes_Autonomous", group="Pushbot")
 
 
-public class Red_Side_Cubes_Autonomous extends SkystoneDetectorPhoneCam {
+public class Red_Side_Cubes_Autonomous extends LinearOpMode {
 
     /**
      * Declare on the parts
@@ -54,14 +54,8 @@ public class Red_Side_Cubes_Autonomous extends SkystoneDetectorPhoneCam {
  * we init parts from Hardware
  */
         robot.init(hardwareMap);
-        int cubeLocation = 1;
-        try{
-            super.runOpMode();
-            cubeLocation = super.cubeLocation;
-        } catch (Exception e)
-        {
+        int cubeLocation = SkystoneDetectorPhoneCam.position(this,"red");
 
-        }
         imu = robot.imu;
         fundationHolder = robot.fundationHolder;
         sideDistanceSensor = robot.sideDistanceSensor;

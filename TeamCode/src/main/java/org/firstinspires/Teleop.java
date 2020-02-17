@@ -283,7 +283,7 @@ public class Teleop extends LinearOpMode {
                 rollerGriperIsOpen = false;
                 isGripperPressed = true;
             } else if (gamepad2.x && !rollerGriperIsOpen && !isGripperPressed) {
-                gripperServo.setPosition(0.38);
+                gripperServo.setPosition(0.45);
                 rollerGriperIsOpen = true;
                 isGripperPressed = true;
             } else if (!gamepad2.x) {
