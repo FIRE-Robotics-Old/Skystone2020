@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Location;
 @Autonomous(name="Red_Side_Cubes_Autonomous", group="Pushbot")
 
 
-public class Red_Side_Cubes_Autonomous extends LinearOpMode {
+public class Red_Side_Cubes_Autonomous extends SkystoneDetectorPhoneCam {
 
     /**
      * Declare on the parts
@@ -51,6 +51,14 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
  * we init parts from Hardware
  */
         robot.init(hardwareMap);
+        int cubeLocation = 1;
+        try{
+            super.runOpMode();
+            cubeLocation = super.cubeLocation;
+        } catch (Exception e)
+        {
+
+        }
         imu = robot.imu;
         fundationHolder = robot.fundationHolder;
         sideDistanceSensor = robot.sideDistanceSensor;
@@ -76,13 +84,13 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
                 robot.imu, telemetry, this, frontDistanceSensor, sideDistanceSensor,
                 new Location(600, 0));
 
-        waitForStart();
+      //  waitForStart();
 /**
  * we set up the path
  */
         try {
 
-            cubePostion = ((1) * stoneSize) - 140;
+            cubePostion = ((cubeLocation) * stoneSize) - 140;
 
             ad.setPosition(new Location(cubePostion, -600),
                     0, 50, 100, 5, 50, speed);
@@ -146,7 +154,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
             leftStone.setPower(0);
 
             ////////////////////////////////////////////////////////////////////////////////////
-            cubePostion = ((4) * stoneSize)-100;
+            cubePostion = ((cubeLocation+3) * stoneSize)-100;
 
             ad.setPosition(new Location(cubePostion, -600),
                     0, 70, 100, 5, 50, speed);

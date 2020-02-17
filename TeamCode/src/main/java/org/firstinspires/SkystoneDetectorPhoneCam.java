@@ -35,6 +35,8 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
     private static int valLeft = -1;
     private static int valRight = -1;
 
+    public static int cubeLocation = 0;
+
     private static float rectHeight = .6f/8f;
     private static float rectWidth = 1.5f/8f;
 
@@ -47,7 +49,7 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
     //moves all rectangles right or left by amount. units are in ratio to monitor
 
     private final int rows = 640;
-    private final int cols = 360;
+    private final int cols = 480;
 
     OpenCvCamera phoneCam;
 
@@ -67,26 +69,37 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
+
+
+
         waitForStart();
+
+        boolean selectedMode = false;
+
+
+
         runtime.reset();
-        while (opModeIsActive()) {
+        while (opModeIsActive() && !selectedMode) {
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
 
             //Block is in left position
             if (valLeft == 0 && valMid == 255 && valRight == 255) {
-                //Code to run if block is in the left position
+                cubeLocation = 3;
+                selectedMode = true;
             }
 
             //Block is in Middle Position
             else if (valLeft == 255 && valMid == 0 && valRight == 255) {
-                //Code when Block is in Middle Position
+                cubeLocation = 2;
+                selectedMode = true;
             }
 
             //Block is in Right Position
             else if (valLeft == 255 && valMid == 255 && valRight == 0) {
-                //Code when Block is in the Middle Position
+                cubeLocation = 1;
+                selectedMode = true;
             }
 
             telemetry.update();

@@ -180,6 +180,7 @@ public class AutoDrivingSecondTry {
                     telemetry.addData("y axis distance: ", distancesToDrive[1]);
                     telemetry.addData("x current: ", activeLocation.getX_Axis());
                     telemetry.addData("y current: ", activeLocation.getY_Axis());
+                    telemetry.addData("chosen cube:", SkystoneDetectorPhoneCam.cubeLocation);
 
                     gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
