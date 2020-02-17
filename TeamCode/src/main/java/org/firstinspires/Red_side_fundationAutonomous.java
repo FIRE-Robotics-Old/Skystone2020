@@ -238,12 +238,11 @@ Red_side_fundationAutonomous extends LinearOpMode  {
 
        //     ad.stopAllAutoCalculations();
             Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 180;
-
+            stop();
         }
         catch (Exception e)
         { telemetry.addData("error:",e.getStackTrace().toString());
             ad.stopAllAutoCalculations();}
-
-
+        stop();
     }
 }
