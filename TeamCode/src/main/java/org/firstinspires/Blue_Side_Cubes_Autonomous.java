@@ -1,7 +1,5 @@
 package org.firstinspires;
 
-import android.util.Log;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,14 +8,16 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.Location;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.Location;
 
 
-@Autonomous(name="Cubes Autonomous", group="Pushbot")
+@Autonomous(name="Blue_Side_Cubes_Autonomous", group="Pushbot")
 
 
-public class cubesAutonomous extends LinearOpMode {
+public class Blue_Side_Cubes_Autonomous extends LinearOpMode {
 
     /**
      * Declare on the parts
@@ -34,7 +34,8 @@ public class cubesAutonomous extends LinearOpMode {
     private DcMotor rightSide;
     private DcMotor middleMotor;
     private DcMotor gripperMotor;
-    private DcMotor cubesMotor;
+    private DcMotor rightStone;
+    private DcMotor leftStone;
     private double stoneSize = 203.2;
     private int mode = 1;
     private double fieldSide = 3660;
@@ -42,6 +43,8 @@ public class cubesAutonomous extends LinearOpMode {
     private double robotWidth = 430;
     private double robotWidthWhenOpen = 550;
     private double cubePostion = 0;
+    private double speed = 0.6;
+    private final int side = -1 ; // blue = -1
 
     @Override
 
@@ -50,6 +53,9 @@ public class cubesAutonomous extends LinearOpMode {
  * we init parts from Hardware
  */
         robot.init(hardwareMap);
+        int cubeLocation = SkystoneDetectorPhoneCam.position(this,"blue", telemetry);
+        cubeLocation = 4 - cubeLocation;
+
         imu = robot.imu;
         fundationHolder = robot.fundationHolder;
         sideDistanceSensor = robot.sideDistanceSensor;
@@ -60,7 +66,8 @@ public class cubesAutonomous extends LinearOpMode {
         middleMotor = robot.middleDrive;
         gripperMotor = robot.gripperMotor;
         gripperServo = robot.gripperServo;
-        cubesMotor = robot.cubesMotor;
+        leftStone = robot.left_stone;
+        rightStone = robot.right_stone;
         rightSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         middleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -72,27 +79,27 @@ public class cubesAutonomous extends LinearOpMode {
  */
         AutoDrivingSecondTry ad = new AutoDrivingSecondTry(robot.leftDrive, robot.rightDrive, robot.middleDrive,
                 robot.imu, telemetry, this, frontDistanceSensor, sideDistanceSensor,
-                new Location(600, 0));
+                new Location(-620, 0));
 
-        waitForStart();
+      //  waitForStart();
 /**
  * we set up the path
  */
         try {
+            rightStone.setPower(0);
+            cubePostion = ((cubeLocation) * stoneSize)-180;
 
-            cubePostion = ((4) * stoneSize) - 580;
-
-            ad.setPosition(new Location(cubePostion, -600),
-                    0, 70, 300, 5, 50, 0.3);
+            ad.setPosition(new Location(side*cubePostion+120 , -600),
+                    0, 40, 200, 5, 0, speed);
 
 
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 500)
+            while(runtime.milliseconds() < 700)
             {
-                leftSide.setPower(0.2);
-                rightSide.setPower(0.2);
+                leftSide.setPower(0.5);
+                rightSide.setPower(0.5);
             }
 
 
@@ -105,9 +112,9 @@ public class cubesAutonomous extends LinearOpMode {
 //            gripperMotor.setPower(1);
             runtime.reset();
             while(runtime.milliseconds() < 1000) {
-                cubesMotor.setPower(-0.3);
+                rightStone.setPower(-0.5);
             }
-            cubesMotor.setPower(0);
+            rightStone.setPower(0);
 
 
 
@@ -128,35 +135,35 @@ public class cubesAutonomous extends LinearOpMode {
             }
 
 
-            ad.setPosition(new Location(cubePostion, -200),
-                    0, 50, 200, 5, 50, 0.3);
+            ad.setPosition(new Location(side*cubePostion+120, -200),
+                    0, 50, 100, 5, 0, speed);
 
 
-            ad.setPosition(new Location(2000, -200),
-                    0, 200, 500, 5, 30, 0.3);
+            ad.setPosition(new Location(side*2000, -200),
+                    90, 100, 100, 5, 40, speed);
 
 
             ///////////////////////////////////////////////////////////////////////////////
             runtime.reset();
             while(runtime.milliseconds() < 500) {
-                cubesMotor.setPower(0.3);
+                rightStone.setPower(0.5);
             }
-            cubesMotor.setPower(0);
+
 
             ////////////////////////////////////////////////////////////////////////////////////
-            cubePostion = ((6) * stoneSize) - 580;
+            cubePostion = ((cubeLocation + 3) * stoneSize);
 
-            ad.setPosition(new Location(cubePostion, -600),
-                    0, 70, 300, 5, 50, 0.3);
+            ad.setPosition(new Location(side*cubePostion+120, -600),
+                    0, 50, 200, 5, 30, speed);
 
 
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 700)
+            while(runtime.milliseconds() < 800)
             {
-                leftSide.setPower(0.2);
-                rightSide.setPower(0.2);
+                leftSide.setPower(0.5);
+                rightSide.setPower(0.5);
             }
 
 
@@ -165,29 +172,29 @@ public class cubesAutonomous extends LinearOpMode {
 
             runtime.reset();
             while(runtime.milliseconds() < 1000) {
-                cubesMotor.setPower(-0.3);
+                rightStone.setPower(-0.5);
             }
-            cubesMotor.setPower(0);
+            rightStone.setPower(0);
 
-            ad.setPosition(new Location(cubePostion, -200),
-                    0, 50, 200, 5, 50, 0.3);
+            ad.setPosition(new Location(side*cubePostion+120, -200),
+                    0, 50, 100, 5, 0, speed);
 
 
-            ad.setPosition(new Location(2000, -200),
-                    0, 200, 500, 5, 30, 0.3);
+            ad.setPosition(new Location(side*2400, -100),
+                    90, 100, 100, 5, 40, speed);
 ///////
 
 
             runtime.reset();
             while(runtime.milliseconds() < 500) {
-                cubesMotor.setPower(0.3);
+                rightStone.setPower(0.5);
             }
-            cubesMotor.setPower(0);
+            rightStone.setPower(0);
 
             ///
 
-            ad.setPosition(new Location(1700, -200),
-                    0, 200, 500, 5, 30, 0.3);
+            ad.setPosition(new Location(side*1800, -200),
+                    0, 100, 100, 5, 30, 0.6);
 
 //            runtime.reset();
 //            while(runtime.milliseconds() < 1500) {
@@ -219,6 +226,7 @@ public class cubesAutonomous extends LinearOpMode {
 //
 //            leftSide.setPower(0);
 //            rightSide.setPower(0);
+
 //            gripperMotor.setPower(0);
 //
 //            ad.setPosition(new Location(0, 1000), 0,
@@ -233,8 +241,11 @@ public class cubesAutonomous extends LinearOpMode {
 //            }
 //            gripperMotor.setPower(0);
             ad.stopAllAutoCalculations();
+            Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 180;
+            stop();
         } catch (Exception e) {
             telemetry.addData("error:", e.getStackTrace().toString());
         }
+        stop();
     }
 }

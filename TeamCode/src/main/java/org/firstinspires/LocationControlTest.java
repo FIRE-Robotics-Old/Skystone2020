@@ -1,5 +1,6 @@
 package org.firstinspires;
 
+
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -36,10 +37,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.teamcode.Location;
+import org.firstinspires.Location;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 //import com.qualcomm.robotcore.hardware.Servo;
@@ -67,6 +69,7 @@ public class LocationControlTest extends LinearOpMode  {
     //private DcMotor griper;
     private DcMotor rightSide;
     private DcMotor middleMotor;
+    private Servo rightExpansion;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -76,6 +79,7 @@ public class LocationControlTest extends LinearOpMode  {
         leftSide = hardwareMap.get(DcMotor.class, "left_drive");
         rightSide = hardwareMap.get(DcMotor.class, "right_drive");
         middleMotor =hardwareMap.get(DcMotor.class, "middle_drive");
+        rightExpansion = hardwareMap.get(Servo.class,"right_expansion");
         //Sets the direction of the motors, one motor as to be reversed for all to spin in same direction
         leftSide.setDirection(DcMotor.Direction.FORWARD);
         rightSide.setDirection(DcMotor.Direction.REVERSE);
@@ -97,6 +101,10 @@ public class LocationControlTest extends LinearOpMode  {
 
         Location initPos = new Location(0, 0);
 
+
+
+        //Robot_Prameters rp = new Robot_Prameters( 2500 , new Location(0,0)); // I assumed we use dimensions in millimeters
+        //Field field  = new Field(400000 , 40000);
         //imu = robot.imu;
         //fundationHolder = robot.fundationHolder;
 
@@ -113,21 +121,28 @@ public class LocationControlTest extends LinearOpMode  {
         while (opModeIsActive()) {
 
             try {
-                //telemetry.speak("test");
-                //telemetry.addData("Angle: ", imu.isGyroCalibrated());
-                //telemetry.update();
-                //  fundationHolder.setPosition(0);
-////            ad.setPosition(new Location(200, -100),
-////                    -90, 20, 200, 10, 60, 0.6 );
+                rightExpansion.setPosition(0.67);
+                Location one;
+                Location two;
+                //camera vision
+                int at = 1;
+
+                Location merge = new Location(-456,0);
 
 
-                //String angle = ""+imu.getAngularOrientation();
-                //telemetry.addData("Angle: ", imu.getPosition());
-                //telemetry.update();
-                //Orientation angle =  imu.getAngularOrientation();
-                int y = 1800;
+                if (at==1){
+                    one = new Location(-1115,709);
+                    two = new Location(-1115,608);
+                }else if (at == 2){
+                    one = new Location(-1100, -456);
+                    two = new Location (-1100,-355);//Moves four in to secure block
+                }else{
+                    one = new Location(-1064,304);
+                    two = new Location(-1064,203);
+                }
 
-                ad.setPosition(new Location(0, y),
+
+                ad.setPosition(one,
                         0, 25, 25, 10, 30, 0.3);
                 //runtime = new ElapsedTime();
                 //telemetry.speak("At position one");
@@ -150,8 +165,8 @@ public class LocationControlTest extends LinearOpMode  {
 
 
                 //Thread.sleep(1000);
-                ad.setPosition(new Location(600, y),
-                0, 25, 25, 10, 30, 0.3 );
+                ad.setPosition(two,
+                        0, 25, 25, 10, 30, 0.3 );
 
                 //start = runtime.milliseconds() ;
                 //while (runtime.milliseconds()-start < 1000) { }
@@ -164,19 +179,21 @@ public class LocationControlTest extends LinearOpMode  {
                 //Thread.sleep(1000);
 
                 //y-=300;
-                //ad.setPosition(new Location(0, (y)),
+                // ad.setPosition(new Location(-152, -101),
                 //0, 25, 20, 10, 30, 0.5 );
                 //ad.setPosition(new Location(1500, (y)), 0, 50, 25, 10, 0, 0.5 );
                 //ad.setPosition(new Location(1500, y),
                 //180,25,20,10,30, 0.5);
 
 
-                //ad.setPosition(new Location(2100, y),
-                //0, 25, 20, 10, 30, 0.5 );
-//            ad.setPosition(new Location(500, 2500),
-//                    0, 150, 250, 200, 0, 0.5 );
-//            ad.setPosition(new Location(-1500, 2500),
-//                    0, 150, 250, 200, 0, 0.5 );
+                ad.setPosition(merge,
+                        0, 25, 20, 10, 30, 0.5 );
+                ad.setPosition(new Location(-456, 400),
+                        0, 25, 25, 10, 0, 0.5 );
+                rightExpansion.setPosition(0.9);
+                ad.setPosition(new Location(-456, 400),
+                        -90, 25, 25, 10, 0, 0.5 );
+                rightExpansion.setPosition(.64);
 
                 ad.stopAllAutoCalculations();
                 stop();
@@ -238,8 +255,10 @@ public class LocationControlTest extends LinearOpMode  {
 //        point = new Location( 1000 , 0);
 //        AD.DriveToCordinate(point , 50 , 0 );
 
-        stop();
+            stop();
         }
     }
 }
+
+
 

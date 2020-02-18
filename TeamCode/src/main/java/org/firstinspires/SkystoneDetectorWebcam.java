@@ -55,7 +55,7 @@ public class SkystoneDetectorWebcam extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Jon"), cameraMonitorViewId);
 
         //P.S. if you're using the latest version of easyopencv, you might need to change the next line to the following:
         //webcam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);

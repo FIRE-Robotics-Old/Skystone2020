@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires;
 /**
  * we import imu,DcMotor,distance sensor , hard ware map , servo, elapsed time , JustLoggingAccelerationIntegrator, Position and Velocity
  */
@@ -36,8 +36,10 @@ public class Hardware{
     public DcMotor leftDrive = null;
     public DcMotor gripperMotor = null;
     public DcMotor rightDrive = null;
-    public DcMotor parkingMotor = null;
-    public DcMotor cubesMotor = null;
+    public DcMotor right_stone = null;
+    public DcMotor left_stone = null;
+
+
     public Servo fundationHolder = null;
     public Servo leftExpantion = null;
     public Servo rightExpantion = null;
@@ -82,8 +84,8 @@ public class Hardware{
         rightDrive = hwMap.get(DcMotor.class, "right_drive");
         middleDrive = hwMap.get(DcMotor.class, "middle_drive");
         gripperMotor = hwMap.get(DcMotor.class ,"gripper_motor");
-        parkingMotor = hwMap.get(DcMotor.class ,"parking_motor");
-        cubesMotor = hwMap.get(DcMotor.class, "parking_motor");
+        right_stone = hwMap.get(DcMotor.class ,"right_stone");
+        left_stone = hwMap.get(DcMotor.class , "left_stone");
         rightExpantion = hwMap.get(Servo.class, "right_expansion");
         leftExpantion = hwMap.get(Servo.class, "left_expansion");
         fourbarServo = hwMap.get(Servo.class ,"fourbar_servo");
@@ -104,7 +106,8 @@ public class Hardware{
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         middleDrive.setDirection(DcMotor.Direction.REVERSE);
         gripperMotor.setDirection(DcMotor.Direction.REVERSE);
-        parkingMotor.setDirection(DcMotor.Direction.FORWARD);
+        right_stone.setDirection(DcMotor.Direction.FORWARD);
+        left_stone.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -116,6 +119,7 @@ public class Hardware{
         rightDrive.setPower(0);
         liftMotor.setPower(0);
         middleDrive.setPower(0);
-        parkingMotor.setPower(0);
+        right_stone.setPower(0);
+        left_stone.setPower(0);
     }
 }

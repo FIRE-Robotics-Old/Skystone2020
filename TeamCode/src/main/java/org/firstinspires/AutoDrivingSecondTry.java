@@ -15,8 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.ActiveLocation;
-import org.firstinspires.ftc.teamcode.Location;
+import org.firstinspires.ActiveLocation;
+import org.firstinspires.Location;
 import org.firstinspires.functions.driveFunction1;
 import org.firstinspires.functions.driveProportional;
 import org.firstinspires.functions.gyroFunction1;
@@ -33,14 +33,14 @@ public class AutoDrivingSecondTry {
         private DistanceSensor frontDistanceSensor;
         private Telemetry telemetry;
         private ElapsedTime runtime = new ElapsedTime();
-        private org.firstinspires.ftc.teamcode.DistanceToTargetFinder distanceToTargetFinder;
-        private org.firstinspires.ftc.teamcode.ActiveLocation activeLocation;
+        private DistanceToTargetFinder distanceToTargetFinder;
+        private ActiveLocation activeLocation;
         private driveProportional driveProportional;
         private gyroProportional gyroProportional;
         private Thread targetLocationThread;
         private Thread currentLocationThread;
         private LinearOpMode linearOpMode;
-    public boolean threadsStopped = false;
+        public boolean threadsStopped = false;
 
     /**
      * the constructor
@@ -71,7 +71,7 @@ public class AutoDrivingSecondTry {
             currentLocationThread = new Thread(activeLocation);
             currentLocationThread.start();
 
-            distanceToTargetFinder = new org.firstinspires.ftc.teamcode.DistanceToTargetFinder(activeLocation, imu);
+            distanceToTargetFinder = new DistanceToTargetFinder(activeLocation, imu);
             targetLocationThread = new Thread(distanceToTargetFinder);
             targetLocationThread.start();
         }
@@ -153,10 +153,10 @@ public class AutoDrivingSecondTry {
      * @param slowAngle
      * @param Vmax
      */
-        public void setPosition(org.firstinspires.ftc.teamcode.Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax){
+        public void setPosition(Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax){
             try {
-                telemetry.addData("Begining is Active still alive: ", currentLocationThread.isAlive());
-                telemetry.addData("Begining is finder still alive:", targetLocationThread.isAlive());
+                telemetry.addData("Beginning is Active still alive: ", currentLocationThread.isAlive());
+                telemetry.addData("Beginning is finder still alive:", targetLocationThread.isAlive());
                 telemetry.update();
 
 //            ElapsedTime runtime = new ElapsedTime();
@@ -180,6 +180,7 @@ public class AutoDrivingSecondTry {
                     telemetry.addData("y axis distance: ", distancesToDrive[1]);
                     telemetry.addData("x current: ", activeLocation.getX_Axis());
                     telemetry.addData("y current: ", activeLocation.getY_Axis());
+                    telemetry.addData("chosen cube:", SkystoneDetectorPhoneCam.cubeLocation);
 
                     gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
