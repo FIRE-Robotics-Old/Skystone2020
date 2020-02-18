@@ -53,7 +53,7 @@ public class Blue_Side_Cubes_Autonomous extends LinearOpMode {
  * we init parts from Hardware
  */
         robot.init(hardwareMap);
-        int cubeLocation = SkystoneDetectorPhoneCam.position(this,"blue");
+        int cubeLocation = SkystoneDetectorPhoneCam.position(this,"blue", telemetry);
         cubeLocation = 4 - cubeLocation;
 
         imu = robot.imu;
