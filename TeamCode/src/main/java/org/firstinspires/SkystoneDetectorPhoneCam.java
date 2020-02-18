@@ -49,6 +49,8 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
     private final int rows = 640;
     private final int cols = 480;
 
+    private static int position = 0;
+
     OpenCvCamera phoneCam;
 
     @Override
@@ -77,16 +79,19 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
             //Block is in left position
             if (valLeft == 0 && valMid == 255 && valRight == 255) {
                 //Code to run if block is in the left position
+                position = 1;
             }
 
             //Block is in Middle Position
             else if (valLeft == 255 && valMid == 0 && valRight == 255) {
                 //Code when Block is in Middle Position
+                position = 2;
             }
 
             //Block is in Right Position
             else if (valLeft == 255 && valMid == 255 && valRight == 0) {
                 //Code when Block is in the Middle Position
+                position = 3;
             }
 
             telemetry.update();
