@@ -79,7 +79,7 @@ public class LocationControlTest extends LinearOpMode  {
         leftSide = hardwareMap.get(DcMotor.class, "left_drive");
         rightSide = hardwareMap.get(DcMotor.class, "right_drive");
         middleMotor =hardwareMap.get(DcMotor.class, "middle_drive");
-        rightExpansion = hardwareMap.get(Servo.class,"rightExpansion");
+        rightExpansion = hardwareMap.get(Servo.class,"right_expansion");
         //Sets the direction of the motors, one motor as to be reversed for all to spin in same direction
         leftSide.setDirection(DcMotor.Direction.FORWARD);
         rightSide.setDirection(DcMotor.Direction.REVERSE);

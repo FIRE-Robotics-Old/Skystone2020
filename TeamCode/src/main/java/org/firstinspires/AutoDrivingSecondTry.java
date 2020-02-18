@@ -155,8 +155,8 @@ public class AutoDrivingSecondTry {
      */
         public void setPosition(Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax){
             try {
-                telemetry.addData("Begining is Active still alive: ", currentLocationThread.isAlive());
-                telemetry.addData("Begining is finder still alive:", targetLocationThread.isAlive());
+                telemetry.addData("Beginning is Active still alive: ", currentLocationThread.isAlive());
+                telemetry.addData("Beginning is finder still alive:", targetLocationThread.isAlive());
                 telemetry.update();
 
 //            ElapsedTime runtime = new ElapsedTime();

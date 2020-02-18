@@ -49,6 +49,7 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
     private static float[] rightPos = {6f/8f+offsetX, 4f/8f+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
 
+    public static int skystone = -1;
     private final int rows = 640;
     private final int cols = 480;
 
@@ -224,16 +225,19 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 
                 //Block is in left position, so closest to center
                 if (valLeft == 0 && valMid == 255 && valRight == 255) {
+                    skystone = 1;
                     return 1;
                 }
 
                 //Block is in Middle Position
                 else if (valLeft == 255 && valMid == 0 && valRight == 255) {
+                    skystone = 2;
                     return 2;
                 }
 
                 //Block is in Right Position, so furthest from center
                 else if (valLeft == 255 && valMid == 255 && valRight == 0) {
+                    skystone = 3;
                     return 3;
                 }
             }
@@ -246,21 +250,25 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 
                 //Block is in left, so furthest from center
                 if (valLeft == 0 && valMid == 255 && valRight == 255) {
+                    skystone = 3;
                     return 3;
                 }
 
                 //Block is in Middle Position
                 else if (valLeft == 255 && valMid == 0 && valRight == 255) {
+                    skystone = 2;
                     return 2;
                 }
 
                 //Block is in Right Position, so closest to Center
                 else if (valLeft == 255 && valMid == 255 && valRight == 0) {
+                    skystone = 1;
                     return 1;
                 }
             }
         }
         //Couldn't Find it / Ran out of time
+        skystone = -1;
         return 1;
     }
 
