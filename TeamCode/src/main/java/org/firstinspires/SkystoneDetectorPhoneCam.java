@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -190,7 +189,7 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 //        }
 
 
-    public static int position (LinearOpMode opMode, String colorSide, Telemetry telemetry) {
+    public static int position (LinearOpMode opMode, String colorSide) {
         colorSide = colorSide.toLowerCase();
         //Dimensions of Camera Pixels
         int rows = 640;
@@ -217,14 +216,8 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 
         opMode.waitForStart();
 
-        while (opMode.opModeIsActive() && runtime.milliseconds() <= 10000) {
+        while (opMode.opModeIsActive() && runtime.milliseconds() <= 5000) {
             if (colorSide.equals("blue")) {
-                telemetry.addData("Values", intToColor(valLeft) + "   " + intToColor(valMid) + "   " + intToColor(valRight));
-                telemetry.addData("Height", rows);
-                telemetry.addData("Width", cols);
-
-                telemetry.update();
-
                 //Block is in left position, so closest to center
                 if (valLeft == 0 && valMid == 255 && valRight == 255) {
                     skystone = 1;
@@ -244,12 +237,6 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
                 }
             }
             else if (colorSide.equals("red")) {
-                telemetry.addData("Values", intToColor(valRight) + "   " + intToColor(valMid) + "   " + intToColor(valLeft));
-                telemetry.addData("Height", rows);
-                telemetry.addData("Width", cols);
-
-                telemetry.update();
-
                 //Block is in left, so furthest from center
                 if (valLeft == 0 && valMid == 255 && valRight == 255) {
                     skystone = 3;
@@ -271,7 +258,7 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
         }
         //Couldn't Find it / Ran out of time
         skystone = -1;
-        return 1;
+        return 2;
     }
 
     public static String intToColor(int colorVal) {

@@ -43,7 +43,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.Location;
 
 
 /**
@@ -112,7 +111,7 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 300)
+            while(runtime.milliseconds() < 500)
             {
                 leftSide.setPower(powerFactor);
                 rightSide.setPower(powerFactor);
@@ -138,13 +137,13 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
             ad.DriveToWall(0*side, 5, 0, powerFactor, 250);
 
             //test
-            ad.setPosition(new Location(side*600,side*600 ) ,-90, 70 ,300 ,5 ,10 ,powerFactor);
+            ad.setPosition(new Location(side*600,side*600 ) ,-90, 70 ,300 ,5 ,10 ,powerFactor ,7000);
             //    ad.setPosition(new Location(700, 400), 0 , 50 ,300 ,10 ,20 ,0.5);
 
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 1500)
+            while(runtime.milliseconds() < 2000)
             {
                 leftSide.setPower(1);
                 rightSide.setPower(1);
@@ -153,22 +152,10 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
             leftSide.setPower(0);
             rightSide.setPower(0);
 
+            runtime = new ElapsedTime();
+            while(runtime.milliseconds() < 1500){}
+
             ad.updateXAxis(-465);
-
-//
-//
-//            runtime = new ElapsedTime();
-//            while(runtime.milliseconds() < 1600)
-//            {
-//                middleMotor.setPower(-0.8);
-//            }
-//
-//            middleMotor.setPower(0);
-//            ad.updateXAxis(0);
-
-//            runtime = new ElapsedTime();
-//            while(runtime.milliseconds() < 500){
-//            }
 
             fundationHolder.setPosition(1);
 
@@ -176,10 +163,15 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
             while(runtime.milliseconds() < 500){}
 
 
-            ad.setPosition(new Location(side*1500,side*200),
-                    -90, 100, 300, 10, 30, powerFactor);
+            ad.setPosition(new Location(side*1800,side*500),
+                    -90, 100, 300, 10, 30, 0.6);
 
             leftExpantion.setPosition(0);
+
+            runtime.reset();
+            while (runtime.milliseconds() < 1000)
+                middleMotor.setPower(1);
+            middleMotor.setPower(0);
 
           //  ad.stopAllAutoCalculations();
             Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 180;

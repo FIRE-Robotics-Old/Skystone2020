@@ -1,7 +1,5 @@
 package org.firstinspires;
 
-import android.util.Log;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.Location;
 
 
 @Autonomous(name="Red_Side_Cubes_Autonomous", group="Pushbot")
@@ -45,8 +42,9 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
     private double robotWidth = 430;
     private double robotWidthWhenOpen = 550;
     private double cubePostion = 0;
-    private double speed = 0.6;
+    private double speed = 0.8;
     public static int cubeLocation;
+    private double[] distanceRange ;
 
     @Override
 
@@ -54,8 +52,9 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
 /**
  * we init parts from Hardware
  */
+        distanceRange = new double[2];
         robot.init(hardwareMap);
-        cubeLocation = SkystoneDetectorPhoneCam.position(this,"red", telemetry);
+        cubeLocation = SkystoneDetectorPhoneCam.position(this,"red");
 
         imu = robot.imu;
         fundationHolder = robot.fundationHolder;
@@ -80,7 +79,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
  */
         AutoDrivingSecondTry ad = new AutoDrivingSecondTry(robot.leftDrive, robot.rightDrive, robot.middleDrive,
                 robot.imu, telemetry, this, frontDistanceSensor, sideDistanceSensor,
-                new Location(600, 0));
+                new Location(620, 0));
 
       //  waitForStart();
 /**
@@ -88,10 +87,10 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
  */
         try {
 
-            cubePostion = ((cubeLocation) * stoneSize) - 140;
+            cubePostion = ((cubeLocation+3) * stoneSize) - 140;
 
             ad.setPosition(new Location(cubePostion, -600),
-                    0, 50, 100, 5, 50, speed);
+                    0, 50, 150, 5, 50, speed ,5000);
 
 
 
@@ -137,11 +136,11 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
 
 
             ad.setPosition(new Location(cubePostion, -200),
-                    0, 50, 100, 5, 50, speed);
+                    0, 50, 100, 5, 50, speed,2000);
 
 
             ad.setPosition(new Location(2000, -200),
-                    -90, 100, 100, 5, 30, speed);
+                    -90, 100, 100, 5, 30, speed, 5000);
 
 
             ///////////////////////////////////////////////////////////////////////////////
@@ -152,12 +151,16 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
             leftStone.setPower(0);
 
             ////////////////////////////////////////////////////////////////////////////////////
-            cubePostion = ((cubeLocation+3) * stoneSize)-100;
+            cubePostion = ((cubeLocation) * stoneSize)-140;
 
+//            ad.setPosition(new Location(cubePostion, -600),
+//                    0, 50, 100, 5, 50, speed, 5000);
+
+
+            distanceRange[0] = 50 ;
+            distanceRange[1] = 100 ;
             ad.setPosition(new Location(cubePostion, -600),
-                    0, 70, 100, 5, 50, speed);
-
-
+                    0, distanceRange,  150, 5, 50, speed, 150,3000);
 
 
             runtime = new ElapsedTime();
@@ -177,12 +180,12 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
             }
             leftStone.setPower(0);
 
-            ad.setPosition(new Location(cubePostion, -200),
-                    0, 50, 100, 5, 50, speed);
+            ad.setPosition(new Location(cubePostion, -620),
+                    0, 50, 100, 5, 50, speed, 5000);
 
 
-            ad.setPosition(new Location(2400, -100),
-                    -90, 100, 100, 5, 30, speed);
+            ad.setPosition(new Location(2000, -100),
+                    -90, 100, 100, 5, 30, speed, 2000);
 ///////
 
 
@@ -195,51 +198,9 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
             ///
 
             ad.setPosition(new Location(1800, -200),
-                    0, 100, 100, 5, 30, 0.6);
+                    0, 100, 100, 5, 30, 0.6, 5000);
 
-//            runtime.reset();
-//            while(runtime.milliseconds() < 1500) {
-//            }
 
-//            runtime.reset();
-//            while(runtime.milliseconds() < 300) {
-//                gripperMotor.setPower(-0.8);
-//            }
-        //    gripperMotor.setPower(0);
-
-//            runtime.reset();
-//            while(runtime.milliseconds() < 1500) {
-//            }
-
-//            ad.setPosition(new Location(0, 1000), 0, 50, 200, 5, 40, 0.6);
-//
-//            cubePostion = (mode * stoneSize) + robotLength/2;
-//
-//            ad.setPosition(new Location(600, cubePostion), 120, 20, 200, 5, 30, 0.3);
-//
-//            runtime.reset();
-//            while(runtime.milliseconds() < 500)
-//            {
-//                gripperMotor.setPower(0.8);
-//                leftSide.setPower(-0.4);
-//                rightSide.setPower(-0.4);
-//            }
-//
-//            leftSide.setPower(0);
-//            rightSide.setPower(0);
-//            gripperMotor.setPower(0);
-//
-//            ad.setPosition(new Location(0, 1000), 0,
-//                    50, 200, 5, 40, 0.6);
-//
-//            ad.setPosition(new Location(0, 1800), 0,
-//                    50, 200, 5, 40, 0.8);
-//
-//            runtime.reset();
-//            while(runtime.milliseconds() < 300) {
-//                gripperMotor.setPower(-0.8);
-//            }
-//            gripperMotor.setPower(0);
             ad.stopAllAutoCalculations();
             Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 180;
             stop();

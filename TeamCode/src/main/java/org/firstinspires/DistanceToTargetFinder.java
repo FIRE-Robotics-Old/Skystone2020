@@ -3,18 +3,11 @@ package org.firstinspires;
  *In this section we import gyro,AngleUnit,AxesOrder and AxesReference
  */
 
-import android.os.Process;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
-import org.firstinspires.ActiveLocation;
-import org.firstinspires.Location;
 
 public class DistanceToTargetFinder implements Runnable{
     /**
@@ -74,7 +67,7 @@ public class DistanceToTargetFinder implements Runnable{
      * this function activate the thread
      */
     public void run() {
-        android.os.Process.setThreadPriority((Process.THREAD_PRIORITY_BACKGROUND));
+     //   android.os.Process.setThreadPriority((Process.THREAD_PRIORITY_BACKGROUND));
         stop = false;
         while (!stop){
             DistanceAxisMeasurement();

@@ -3,20 +3,18 @@ package org.firstinspires;
  * we import imu ,LinearOpMode,DcMotor,distance sensor,ElapsedTime, Telemetry,AngleUnit,AxesOrder,AxesReference,DistanceUnit,driveFunction1,driveProportional,gyroFunction1 and gyroProportional
  */
 
-import android.util.Log;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ActiveLocation;
-import org.firstinspires.Location;
 import org.firstinspires.functions.driveFunction1;
 import org.firstinspires.functions.driveProportional;
 import org.firstinspires.functions.gyroFunction1;
@@ -25,9 +23,9 @@ import org.firstinspires.functions.gyroProportional;
 public class AutoDrivingSecondTry {
     /** Declare  the parts and verbals   */
 
-        private DcMotor leftSide;
-        private DcMotor rightSide;
-        private DcMotor middleMotor;
+        private DcMotorEx leftSide;
+        private DcMotorEx rightSide;
+        private DcMotorEx middleMotor;
         private BNO055IMU imu;
         private DistanceSensor sideDistanceSensor;
         private DistanceSensor frontDistanceSensor;
@@ -40,7 +38,14 @@ public class AutoDrivingSecondTry {
         private Thread targetLocationThread;
         private Thread currentLocationThread;
         private LinearOpMode linearOpMode;
+        private ElapsedTime AutoTotalRunTime;
+
         public boolean threadsStopped = false;
+
+        //Some final variables
+        final static int ticksPerRotation = 1120;
+        final static double circumference = 90 * Math.PI;
+
 
     /**
      * the constructor
@@ -56,12 +61,13 @@ public class AutoDrivingSecondTry {
                                      DistanceSensor sideDistanceSensor, DistanceSensor frontDistanceSensor, Location beginningPoint)
         {
 
+            AutoTotalRunTime  = new ElapsedTime();
             this.linearOpMode = linearOpMode;
             driveProportional = new driveFunction1();
             gyroProportional = new gyroFunction1();
-            this.leftSide = leftSide;
-            this.rightSide = rightSide;
-            this.middleMotor = middleMotor;
+            this.leftSide = (DcMotorEx) leftSide;
+            this.rightSide = (DcMotorEx) rightSide;
+            this.middleMotor = (DcMotorEx) middleMotor;
             this.imu = imu;
             this.telemetry = telemetry;
             this.sideDistanceSensor = sideDistanceSensor;
@@ -100,17 +106,18 @@ public class AutoDrivingSecondTry {
      */
     public void DriveToWall(double angleToReach , double angleRange , double slowAngle , double Vmax, double distanceFromWall)
         {
-            double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-            double gyroPropVal = gyroProportional.gyroProportionalCalculation(angleToReach, gyroAngle, slowAngle, Vmax/2);
 
 
             runtime.reset();
             while(frontDistanceSensor.getDistance(DistanceUnit.MM) > distanceFromWall &&
-                    !Thread.interrupted() && linearOpMode.opModeIsActive())
+                    !Thread.interrupted() && linearOpMode.opModeIsActive() && AutoTotalRunTime.milliseconds() < 29000)
             {
-                Log.e("CUBES", "positionning infront of a cube will start now");
-                leftSide.setPower(-0.8 - gyroPropVal);
-                rightSide.setPower(-0.8 + gyroPropVal);
+                double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+                double gyroPropVal = gyroProportional.gyroProportionalCalculation(angleToReach, gyroAngle, slowAngle, Vmax/2);
+
+             //   Log.e("CUBES", "positionning infront of a cube will start now");
+                leftSide.setPower(-0.8*(1-gyroPropVal) - gyroPropVal);
+                rightSide.setPower(-0.8*(1-gyroPropVal) + gyroPropVal);
                 telemetry.addData("distance: ", frontDistanceSensor.getDistance(DistanceUnit.MM));
                 telemetry.update();
             }
@@ -141,25 +148,35 @@ public class AutoDrivingSecondTry {
     }
 
 
+    public void  setPosition( Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax , double time_out){
+        double[] distanceRange2 = {distanceRange , distanceRange};
+        setPosition( locationToReach ,  angleToReach ,  distanceRange2 ,  slowDrive ,  angleRange ,  slowAngle ,  Vmax, slowDrive, time_out );
+    }
 
-
+    public void setPosition(Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax){
+        double[] distanceRange2 = {distanceRange , distanceRange};
+        setPosition( locationToReach ,  angleToReach ,  distanceRange2 ,  slowDrive ,  angleRange ,  slowAngle ,  Vmax, slowDrive , 10000);
+    }
+    public void setPosition(Location locationToReach , double angleToReach , double[] distanceRange , double slowDriveX , double angleRange , double slowAngle , double Vmax, double slowDriveY){
+         setPosition( locationToReach ,  angleToReach ,  distanceRange ,  slowDriveX ,  angleRange ,  slowAngle ,  Vmax,  slowDriveY , 10000);
+    }
     /**
      * calculates the speed and the spinning speed and combines bet ween them
      * @param locationToReach
      * @param angleToReach
      * @param distanceRange
-     * @param slowDrive
+     * @param slowDriveX
      * @param angleRange
      * @param slowAngle
      * @param Vmax
      */
-        public void setPosition(Location locationToReach , double angleToReach , double distanceRange , double slowDrive , double angleRange , double slowAngle , double Vmax){
+        public void setPosition(Location locationToReach , double angleToReach , double[] distanceRange , double slowDriveX , double angleRange , double slowAngle , double Vmax, double slowDriveY , double time_out){
             try {
                 telemetry.addData("Beginning is Active still alive: ", currentLocationThread.isAlive());
                 telemetry.addData("Beginning is finder still alive:", targetLocationThread.isAlive());
                 telemetry.update();
 
-//            ElapsedTime runtime = new ElapsedTime();
+             ElapsedTime runtime = new ElapsedTime();
 //            while (runtime.time() < 2000){}
 
                 distanceToTargetFinder.setNewPoint(locationToReach);
@@ -169,8 +186,8 @@ public class AutoDrivingSecondTry {
                 double rightMotorSpeed;
                 double leftMotorSpeed;
                 double middleMotorSpeed;
-                while (!Thread.interrupted() && linearOpMode.opModeIsActive() && !(Math.abs(distancesToDrive[0]) < distanceRange && Math.abs(distancesToDrive[1]) < distanceRange
-                        && Math.abs(angleToReach-gyroAngle) < angleRange))
+                while (!Thread.interrupted() && linearOpMode.opModeIsActive() && !(Math.abs(distancesToDrive[0]) < distanceRange[0]&& Math.abs(distancesToDrive[1]) < distanceRange[1]
+                        && Math.abs(angleToReach-gyroAngle) < angleRange) && runtime.milliseconds()<time_out && AutoTotalRunTime.milliseconds() < 29000)
                 {
                     distancesToDrive = distanceToTargetFinder.getDistanceTotarget();
                     telemetry.addData("encoders: left ",leftSide.getCurrentPosition());
@@ -183,18 +200,29 @@ public class AutoDrivingSecondTry {
                     telemetry.addData("chosen cube:", SkystoneDetectorPhoneCam.cubeLocation);
 
                     gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
-
-                    double DrivePropValStraight = driveProportional.driveProportionalFunction(distancesToDrive[1], slowDrive , Vmax);
-                    double DrivePropValMiddle = driveProportional.driveProportionalFunction(distancesToDrive[0], slowDrive , Vmax);
-                    double gyroPropVal = gyroProportional.gyroProportionalCalculation(angleToReach, gyroAngle, slowAngle, Vmax/2);
+                    double DrivePropValStraight = 0;
+                    double DrivePropValMiddle = 0;
+                    double gyroPropVal = 0;
+                    if (Math.abs(distancesToDrive[0]) > distanceRange[0])
+                        DrivePropValStraight = driveProportional.driveProportionalFunction(distancesToDrive[1], slowDriveY , Vmax);
+                    if (Math.abs(distancesToDrive[1]) > distanceRange[1])
+                        DrivePropValMiddle = driveProportional.driveProportionalFunction(distancesToDrive[0], slowDriveX , Vmax);
+                    if (Math.abs(gyroAngle - angleToReach) > angleRange)
+                        gyroPropVal = gyroProportional.gyroProportionalCalculation(angleToReach, gyroAngle, slowAngle, Vmax/2);
                     double Max = Math.max(Math.abs(distancesToDrive[0]), Math.abs(distancesToDrive[1]));
                     double driveProp = distancesToDrive[1] * (-DrivePropValStraight);
                     double firstCalc = 1 - Math.abs(gyroPropVal);
 
-                    Max = Math.max(Max ,1.0 );
-                    rightMotorSpeed = ((firstCalc) * (driveProp) / Max) + gyroPropVal;
-                    leftMotorSpeed = ((firstCalc) * (driveProp) / Max) - gyroPropVal;
-                    middleMotorSpeed = distancesToDrive[0] * DrivePropValMiddle / Max;
+                    if (Max != 0) {
+                        rightMotorSpeed = ((firstCalc) * (driveProp) / Max) + gyroPropVal;
+                        leftMotorSpeed = ((firstCalc) * (driveProp) / Max) - gyroPropVal;
+                        middleMotorSpeed = distancesToDrive[0] * DrivePropValMiddle / Max;
+                    }
+                    else {
+                        rightMotorSpeed = gyroPropVal;
+                        leftMotorSpeed = - gyroPropVal;
+                        middleMotorSpeed = 0;
+                    }
 
                     telemetry.addData("left speed ", leftMotorSpeed);
                     telemetry.addData("middle speed: ", middleMotorSpeed);
@@ -232,6 +260,85 @@ public class AutoDrivingSecondTry {
 //                }
             }catch (Exception e){ telemetry.addData("error:",e.getStackTrace().toString());}
 
+        }
+
+        public void move(Location location, double angle) {
+            distanceToTargetFinder.setNewPoint(location);
+            double[] distancesToDrive = distanceToTargetFinder.getDistanceTotarget();
+            double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+
+            telemetry.addData("Encoders", "L: " + leftSide.getCurrentPosition() +
+                    ", R: " + rightSide.getCurrentPosition() + ", M, " + middleMotor.getCurrentPosition());
+            telemetry.addData("Distance ", distancesToDrive[0] + ", " + distancesToDrive[1]);
+            telemetry.addData("Current Position ", activeLocation.getX_Axis() + ", "
+                            + activeLocation.getY_Axis());
+            telemetry.addData("Detected Cube", SkystoneDetectorPhoneCam.cubeLocation);
+
+            double gyroPropVal = gyroProportional.gyroProportionalCalculation(angle, gyroAngle, angle, 1);
+
+            int middleTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation));
+            int leftTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) - (long)gyroPropVal);
+            int rightTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) + (long)gyroPropVal);
+
+            toPosition();
+
+            rightSide.setTargetPosition(rightTick + rightSide.getCurrentPosition());
+            leftSide.setTargetPosition((leftTick) + leftSide.getCurrentPosition());
+            middleMotor.setTargetPosition(middleTick + middleMotor.getCurrentPosition());
+
+            rightSide.setPower(1);
+            leftSide.setPower(1);
+            middleMotor.setPower(1);
+
+            using();
+        }
+
+    public void move(double xDistance, double yDistance, double angle) {
+        double[] distancesToDrive = {xDistance, yDistance};
+        double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+
+        telemetry.addData("Encoders", "L: " + leftSide.getCurrentPosition() +
+                ", R: " + rightSide.getCurrentPosition() + ", M, " + middleMotor.getCurrentPosition());
+        telemetry.addData("Distance ", distancesToDrive[0] + ", " + distancesToDrive[1]);
+        telemetry.addData("Current Position ", activeLocation.getX_Axis() + ", "
+                + activeLocation.getY_Axis());
+        telemetry.addData("Detected Cube", SkystoneDetectorPhoneCam.cubeLocation);
+
+        double gyroPropVal = gyroProportional.gyroProportionalCalculation(angle, gyroAngle, angle, 1);
+
+        int middleTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation));
+        int leftTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) - (long)(gyroPropVal / ticksPerRotation));
+        int rightTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) + (long)(gyroPropVal / ticksPerRotation));
+
+        toPosition();
+
+        rightSide.setTargetPosition(rightTick + rightSide.getCurrentPosition());
+        leftSide.setTargetPosition((leftTick) + leftSide.getCurrentPosition());
+        middleMotor.setTargetPosition(middleTick + middleMotor.getCurrentPosition());
+
+        rightSide.setPower(1);
+        leftSide.setPower(1);
+        middleMotor.setPower(1);
+
+        using();
+    }
+
+        public void stopReset() {
+            rightSide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftSide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            middleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+        public void toPosition() {
+            rightSide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftSide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            middleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+
+        public void using() {
+            rightSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            middleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
 }

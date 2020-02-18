@@ -3,12 +3,9 @@ package org.firstinspires;
  * we import process , imu , DcMotor ,angle unit ,axes order  and axes reference
  */
 
-import android.os.Process;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.AutoDrivingSecondTry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -61,7 +58,7 @@ public class ActiveLocation implements Runnable {
         /** and
          * set up the verbals ThreadPriority
          */
-        android.os.Process.setThreadPriority((Process.THREAD_PRIORITY_BACKGROUND));
+   //     android.os.Process.setThreadPriority((Process.THREAD_PRIORITY_BACKGROUND));
         current_X = 0;
         current_Y1 = 0;
         current_Y2 = 0;
