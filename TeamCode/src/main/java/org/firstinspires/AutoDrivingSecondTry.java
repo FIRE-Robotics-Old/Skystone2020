@@ -262,7 +262,7 @@ public class AutoDrivingSecondTry {
 
         }
 
-        public void move(Location location, double angle) {
+        public void move(Location location) {
             distanceToTargetFinder.setNewPoint(location);
             double[] distancesToDrive = distanceToTargetFinder.getDistanceTotarget();
             double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
@@ -274,11 +274,9 @@ public class AutoDrivingSecondTry {
                             + activeLocation.getY_Axis());
             telemetry.addData("Detected Cube", SkystoneDetectorPhoneCam.cubeLocation);
 
-            double gyroPropVal = gyroProportional.gyroProportionalCalculation(angle, gyroAngle, angle, 1);
-
             int middleTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation));
-            int leftTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) - (long)gyroPropVal);
-            int rightTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) + (long)gyroPropVal);
+            int leftTick = (int) Math.round(distancesToDrive[0] / ticksPerRotation);
+            int rightTick = (int) Math.round(distancesToDrive[0] / ticksPerRotation);
 
             toPosition();
 
@@ -293,9 +291,8 @@ public class AutoDrivingSecondTry {
             using();
         }
 
-    public void move(double xDistance, double yDistance, double angle) {
+    public void move(double xDistance, double yDistance) {
         double[] distancesToDrive = {xDistance, yDistance};
-        double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
         telemetry.addData("Encoders", "L: " + leftSide.getCurrentPosition() +
                 ", R: " + rightSide.getCurrentPosition() + ", M, " + middleMotor.getCurrentPosition());
@@ -303,24 +300,53 @@ public class AutoDrivingSecondTry {
         telemetry.addData("Current Position ", activeLocation.getX_Axis() + ", "
                 + activeLocation.getY_Axis());
         telemetry.addData("Detected Cube", SkystoneDetectorPhoneCam.cubeLocation);
+        telemetry.update();
 
-        double gyroPropVal = gyroProportional.gyroProportionalCalculation(angle, gyroAngle, angle, 1);
-
-        int middleTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation));
-        int leftTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) - (long)(gyroPropVal / ticksPerRotation));
-        int rightTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation) + (long)(gyroPropVal / ticksPerRotation));
-
-        toPosition();
+        int middleTick = (int) (Math.round((distancesToDrive[0] / circumference) * ticksPerRotation));
+        int leftTick = (int) Math.round((distancesToDrive[0] / circumference) * ticksPerRotation);
+        int rightTick = (int) Math.round((distancesToDrive[0] / circumference) * ticksPerRotation);
 
         rightSide.setTargetPosition(rightTick + rightSide.getCurrentPosition());
         leftSide.setTargetPosition((leftTick) + leftSide.getCurrentPosition());
         middleMotor.setTargetPosition(middleTick + middleMotor.getCurrentPosition());
 
+        toPosition();
+
         rightSide.setPower(1);
         leftSide.setPower(1);
         middleMotor.setPower(1);
 
+        while (rightSide.isBusy()) {
+            telemetry.addData("Encoders", "L: " + leftSide.getCurrentPosition() +
+                    ", R: " + rightSide.getCurrentPosition() + ", M, " + middleMotor.getCurrentPosition());
+            telemetry.addData("Distance ", distancesToDrive[0] + ", " + distancesToDrive[1]);
+            telemetry.addData("Current Position ", activeLocation.getX_Axis() + ", "
+                    + activeLocation.getY_Axis());
+            telemetry.addData("Detected Cube", SkystoneDetectorPhoneCam.cubeLocation);
+            telemetry.update();
+        }
+
         using();
+
+        telemetry.addData("Encoders", "L: " + leftSide.getCurrentPosition() +
+                ", R: " + rightSide.getCurrentPosition() + ", M, " + middleMotor.getCurrentPosition());
+        telemetry.addData("Distance ", distancesToDrive[0] + ", " + distancesToDrive[1]);
+        telemetry.addData("Current Position ", activeLocation.getX_Axis() + ", "
+                + activeLocation.getY_Axis());
+        telemetry.addData("Detected Cube", SkystoneDetectorPhoneCam.cubeLocation);
+        telemetry.update();
+    }
+
+    public void turn(double angle) {
+        double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        while(gyroAngle < angle) {
+            using();
+            rightSide.setPower(-.8);
+            leftSide.setPower(.8);
+            gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        }
+        rightSide.setPower(0);
+        leftSide.setPower(0);
     }
 
         public void stopReset() {
@@ -329,13 +355,13 @@ public class AutoDrivingSecondTry {
             middleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
 
-        public void toPosition() {
+        private void toPosition() {
             rightSide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftSide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             middleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
-        public void using() {
+        private void using() {
             rightSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             middleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

@@ -87,7 +87,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
  */
         try {
 
-            cubePostion = ((cubeLocation+3) * stoneSize) - 140;
+            cubePostion = ((cubeLocation+3) * stoneSize) - 140 -80;
 
             ad.setPosition(new Location(cubePostion, -600),
                     0, 50, 150, 5, 50, speed ,5000);
@@ -116,8 +116,6 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
             }
             leftStone.setPower(0);
 
-
-
 //            runtime.reset();
 //            while(runtime.milliseconds() < 1500)
 //            {
@@ -129,17 +127,15 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
 //            rightSide.setPower(0);
 //            gripperMotor.setPower(0);
 
-
             runtime.reset();
-            while(runtime.milliseconds() < 1500) {
+            while(runtime.milliseconds() < 1000) {
             }
-
 
             ad.setPosition(new Location(cubePostion, -200),
                     0, 50, 100, 5, 50, speed,2000);
 
 
-            ad.setPosition(new Location(2000, -200),
+            ad.setPosition(new Location(2500, -200),
                     -90, 100, 100, 5, 30, speed, 5000);
 
 
@@ -151,7 +147,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
             leftStone.setPower(0);
 
             ////////////////////////////////////////////////////////////////////////////////////
-            cubePostion = ((cubeLocation) * stoneSize)-140;
+            cubePostion = ((cubeLocation) * stoneSize)-140 + 1;
 
 //            ad.setPosition(new Location(cubePostion, -600),
 //                    0, 50, 100, 5, 50, speed, 5000);
@@ -184,7 +180,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
                     0, 50, 100, 5, 50, speed, 5000);
 
 
-            ad.setPosition(new Location(2000, -100),
+            ad.setPosition(new Location(2500, -100),
                     -90, 100, 100, 5, 30, speed, 2000);
 ///////
 

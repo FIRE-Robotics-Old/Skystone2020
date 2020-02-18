@@ -66,14 +66,17 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
     private DcMotor middleMotor;
     public double powerFactor=0.8;
     public final int side = -1 ; // blue -1
+    double[] distanceRange;
 
     private  AutoDrivingSecondTry ad;
     @Override
 
     public void runOpMode() {
-/**
+/*
  * we init parts from Hardware
  */
+        distanceRange = new double[2];
+
         robot.init(hardwareMap);
 
         imu = robot.imu;
@@ -161,16 +164,17 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
 
             runtime = new ElapsedTime();
             while(runtime.milliseconds() < 500){}
-
-
-            ad.setPosition(new Location(side*1800,side*500),
-                    -90, 100, 300, 10, 30, 0.6);
+//             telemetry.addData(" loc " , ad.);
+            distanceRange[0] = 100 ;
+            distanceRange[1] = 100 ;
+            ad.setPosition(new Location(-1800, 500*side),
+                    -90, distanceRange, 300, 10, 30, 0.5, 300, 5000);
 
             leftExpantion.setPosition(0);
 
             runtime.reset();
             while (runtime.milliseconds() < 1000)
-                middleMotor.setPower(1);
+                middleMotor.setPower(-1);
             middleMotor.setPower(0);
 
           //  ad.stopAllAutoCalculations();
