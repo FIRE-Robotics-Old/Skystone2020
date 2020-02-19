@@ -265,7 +265,6 @@ public class AutoDrivingSecondTry {
         public void move(Location location) {
             distanceToTargetFinder.setNewPoint(location);
             double[] distancesToDrive = distanceToTargetFinder.getDistanceTotarget();
-            double gyroAngle = -imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
             telemetry.addData("Encoders", "L: " + leftSide.getCurrentPosition() +
                     ", R: " + rightSide.getCurrentPosition() + ", M, " + middleMotor.getCurrentPosition());
@@ -274,9 +273,9 @@ public class AutoDrivingSecondTry {
                             + activeLocation.getY_Axis());
             telemetry.addData("Detected Cube", SkystoneDetectorPhoneCam.cubeLocation);
 
-            int middleTick = (int) (Math.round(distancesToDrive[0] / ticksPerRotation));
-            int leftTick = (int) Math.round(distancesToDrive[0] / ticksPerRotation);
-            int rightTick = (int) Math.round(distancesToDrive[0] / ticksPerRotation);
+            int middleTick = (int) (Math.round((distancesToDrive[0] / circumference) * ticksPerRotation));
+            int leftTick = (int) Math.round((distancesToDrive[0] / ticksPerRotation) * ticksPerRotation);
+            int rightTick = (int) Math.round((distancesToDrive[0] / ticksPerRotation) * ticksPerRotation);
 
             toPosition();
 
