@@ -51,7 +51,7 @@ public class Teleop extends LinearOpMode {
     /**
      *     Declare parts from the Hardware class
      *     and create variable
-      */
+     */
 
     Hardware robot = new Hardware();
     private ElapsedTime runtime = new ElapsedTime();
@@ -105,7 +105,7 @@ public class Teleop extends LinearOpMode {
         gripperServo = robot.gripperServo;
         fundationHolder = robot.fundationHolder;
         imu = robot.imu;
-     //   parkingMotor = robot.parkingMotor;
+        //   parkingMotor = robot.parkingMotor;
 
 /**
  * create more variables
@@ -196,7 +196,7 @@ public class Teleop extends LinearOpMode {
                 fourbarIsOpen = false;
                 isFourbarPressed = true;
             }    else if (!gamepad2.a) {
-               isFourbarPressed = false;
+                isFourbarPressed = false;
             }
 
 

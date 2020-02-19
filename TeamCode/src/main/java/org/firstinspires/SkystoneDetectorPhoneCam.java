@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -48,91 +49,14 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
     private static float[] rightPos = {6f/8f+offsetX, 4f/8f+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
 
-    public static int skystone = -1;
     private final int rows = 640;
     private final int cols = 480;
-
-    private static int position = 0;
 
     OpenCvCamera phoneCam;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        String colorSide = "red".toLowerCase();
-        //Dimensions of Camera Pixels
-        int rows = 640;
-        int cols = 480;
-
-        //Time Elapsed
-        ElapsedTime runtime = new ElapsedTime();
-        runtime.reset();
-
-
-        OpenCvCamera phoneCam;
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
-        //P.S. if you're using the latest version of easyopencv, you might need to change the next line to the following:
-        //webcam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-//        webcam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);//remove this
-        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-
-        phoneCam.openCameraDevice();//open camera
-        phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
-        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_LEFT);//display on RC
-        //width, height
-        //width = height in this case, because camera is in portrait mode.
-
-        waitForStart();
-
-        while (opModeIsActive()) {
-            if (colorSide.equals("blue")) {
-                telemetry.addData("Values", intToColor(valLeft) + "   " + intToColor(valMid) + "   " + intToColor(valRight));
-                telemetry.addData("Height", rows);
-                telemetry.addData("Width", cols);
-
-
-                //Block is in left position, so closest to center
-                if (valLeft == 0 && valMid == 255 && valRight == 255) {
-                    telemetry.addData("Position", "1");
-                }
-
-                //Block is in Middle Position
-                else if (valLeft == 255 && valMid == 0 && valRight == 255) {
-                    telemetry.addData("Position", "2");
-                }
-
-                //Block is in Right Position, so furthest from center
-                else if (valLeft == 255 && valMid == 255 && valRight == 0) {
-                    telemetry.addData("Position:", "3");
-                }
-                telemetry.update();
-            }
-            else if (colorSide.equals("red")) {
-                telemetry.addData("Values", intToColor(valRight) + "   " + intToColor(valMid) + "   " + intToColor(valLeft));
-                telemetry.addData("Height", rows);
-                telemetry.addData("Width", cols);
-
-                telemetry.update();
-
-                //Block is in left, so furthest from center
-                if (valLeft == 0 && valMid == 255 && valRight == 255) {
-                    telemetry.addLine("Position: 3");
-                }
-
-                //Block is in Middle Position
-                else if (valLeft == 255 && valMid == 0 && valRight == 255) {
-                    telemetry.addLine("Position: 2");
-                }
-
-                //Block is in Right Position, so closest to Center
-                else if (valLeft == 255 && valMid == 255 && valRight == 0) {
-                    telemetry.addLine("Position: 1");
-                }
-            }
-        }
-        //Couldn't Find it / Ran out of time
-    }
-
+        int position = position(this, "red");
 //
 //        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 //
@@ -188,6 +112,7 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 //
 //        }
 
+    }
 
     public static int position (LinearOpMode opMode, String colorSide) {
         colorSide = colorSide.toLowerCase();
@@ -210,55 +135,60 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 
         phoneCam.openCameraDevice();//open camera
         phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
-        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_LEFT);//display on RC
+        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
         opMode.waitForStart();
 
-        while (opMode.opModeIsActive() && runtime.milliseconds() <= 5000) {
+        while (opMode.opModeIsActive() && runtime.nanoseconds() <= 10000) {
             if (colorSide.equals("blue")) {
+                opMode.telemetry.addData("Values", intToColor(valLeft) + "   " + intToColor(valMid) + "   " + intToColor(valRight));
+                opMode.telemetry.addData("Height", rows);
+                opMode.telemetry.addData("Width", cols);
+
+                opMode.telemetry.update();
+
                 //Block is in left position, so closest to center
                 if (valLeft == 0 && valMid == 255 && valRight == 255) {
-                    skystone = 1;
                     return 1;
                 }
 
                 //Block is in Middle Position
                 else if (valLeft == 255 && valMid == 0 && valRight == 255) {
-                    skystone = 2;
                     return 2;
                 }
 
                 //Block is in Right Position, so furthest from center
                 else if (valLeft == 255 && valMid == 255 && valRight == 0) {
-                    skystone = 3;
                     return 3;
                 }
             }
             else if (colorSide.equals("red")) {
+                opMode.telemetry.addData("Values", intToColor(valRight) + "   " + intToColor(valMid) + "   " + intToColor(valLeft));
+                opMode.telemetry.addData("Height", rows);
+                opMode.telemetry.addData("Width", cols);
+
+                opMode.telemetry.update();
+
                 //Block is in left, so furthest from center
                 if (valLeft == 0 && valMid == 255 && valRight == 255) {
-                    skystone = 3;
                     return 3;
                 }
 
                 //Block is in Middle Position
                 else if (valLeft == 255 && valMid == 0 && valRight == 255) {
-                    skystone = 2;
                     return 2;
                 }
 
                 //Block is in Right Position, so closest to Center
                 else if (valLeft == 255 && valMid == 255 && valRight == 0) {
-                    skystone = 1;
                     return 1;
                 }
             }
         }
         //Couldn't Find it / Ran out of time
-        skystone = -1;
-        return 2;
+        return 1;
     }
 
     public static String intToColor(int colorVal) {
@@ -270,7 +200,6 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
         }
         else return "null";
     }
-
 
     //detection pipeline
     static class StageSwitchingPipeline extends OpenCvPipeline
