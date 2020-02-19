@@ -116,8 +116,8 @@ public class AutoDrivingSecondTry {
                 double gyroPropVal = gyroProportional.gyroProportionalCalculation(angleToReach, gyroAngle, slowAngle, Vmax/2);
 
              //   Log.e("CUBES", "positionning infront of a cube will start now");
-                leftSide.setPower(-0.8*(1-gyroPropVal) - gyroPropVal);
-                rightSide.setPower(-0.8*(1-gyroPropVal) + gyroPropVal);
+                leftSide.setPower(-0.8*(1-Math.abs(gyroPropVal)) - gyroPropVal);
+                rightSide.setPower(-0.8*(1-Math.abs(gyroPropVal)) + gyroPropVal);
                 telemetry.addData("distance: ", frontDistanceSensor.getDistance(DistanceUnit.MM));
                 telemetry.update();
             }
