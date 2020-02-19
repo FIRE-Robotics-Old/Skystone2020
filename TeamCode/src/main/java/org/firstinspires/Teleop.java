@@ -84,6 +84,8 @@ public class Teleop extends LinearOpMode {
     double leftPower;
     double rightPower;
     double middlePower;
+    DcMotor left_stone;
+    DcMotor right_stone;
 
 
 
@@ -105,6 +107,8 @@ public class Teleop extends LinearOpMode {
         gripperServo = robot.gripperServo;
         fundationHolder = robot.fundationHolder;
         imu = robot.imu;
+        left_stone = robot.left_stone;
+        right_stone = robot.right_stone;
         //   parkingMotor = robot.parkingMotor;
 
 /**
@@ -200,7 +204,7 @@ public class Teleop extends LinearOpMode {
             }
 
 
-/**
+/*
  * switch between the different  mods of the lift (levels and manual)
  */
             if (gamepad2.start && !g2StartButtonIsPressed && !manualControl) {
@@ -265,14 +269,14 @@ public class Teleop extends LinearOpMode {
 
 
 /**
- * opening and closing the expantion
+ * opening and closing the expansion
  */
             if (gamepad1.left_bumper) {
-                robot.rightExpantion.setPosition(0);
-                robot.leftExpantion.setPosition(1);
+                left_stone.setPower(-1);
+                right_stone.setPower(-1);
             } else if (gamepad1.right_bumper) {
-                robot.leftExpantion.setPosition(0);
-                robot.rightExpantion.setPosition(1);
+                left_stone.setPower(1);
+                right_stone.setPower(1);
             }
 
 /**
@@ -291,7 +295,7 @@ public class Teleop extends LinearOpMode {
             }
 
 /**
- * spine the intake
+ * spin the intake
  */
             if (gamepad2.right_bumper) {
                 gripperMotor.setPower(0.8);
@@ -302,7 +306,7 @@ public class Teleop extends LinearOpMode {
             }
 
 /**
- * open and close the fundationHolder
+ * open and close the foundationHolder
  */
             if (gamepad1.start && !foundationHolderIsOpened && !g1StartButtonIsPressed) {
                 fundationHolder.setPosition(0);
