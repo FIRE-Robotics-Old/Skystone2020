@@ -75,13 +75,13 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 
         phoneCam.openCameraDevice();//open camera
         phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
-        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
+        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_RIGHT);//display on RC
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
         waitForStart();
 
-        while (opModeIsActive() && runtime.nanoseconds() <= 10000) {
+        while (opModeIsActive()) {
             if (colorSide.equals("blue")) {
                 telemetry.addData("Values", intToColor(valLeft) + "   " + intToColor(valMid) + "   " + intToColor(valRight));
                 telemetry.addData("Height", rows);
@@ -101,6 +101,8 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
                 else if (valLeft == 255 && valMid == 255 && valRight == 0) {
                     telemetry.addData("Position" , 3);
                 }
+                else telemetry.addData("Position", -1);
+                telemetry.update();
             }
             else if (colorSide.equals("red")) {
                 telemetry.addData("Values", intToColor(valRight) + "   " + intToColor(valMid) + "   " + intToColor(valLeft));
@@ -123,17 +125,16 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
                 }
             }
             else telemetry.addData("Position", -1);
-
+            telemetry.update();
         }
         //Couldn't Find it / Ran out of time
-        telemetry.update();
     }
 
     public static int position (LinearOpMode opMode, String colorSide) {
         colorSide = colorSide.toLowerCase();
         //Dimensions of Camera Pixels
-        int rows = 640;
-        int cols = 480;
+        int cols = 640;
+        int rows = 480;
 
         //Time Elapsed
         ElapsedTime runtime = new ElapsedTime();
@@ -150,13 +151,13 @@ public class SkystoneDetectorPhoneCam extends LinearOpMode {
 
         phoneCam.openCameraDevice();//open camera
         phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
-        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
+        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_RIGHT);//display on RC
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
         opMode.waitForStart();
 
-        while (opMode.opModeIsActive() && runtime.nanoseconds() <= 10000) {
+        while (opMode.opModeIsActive() && runtime.milliseconds() <= 10000) {
             if (colorSide.equals("blue")) {
                 opMode.telemetry.addData("Values", intToColor(valLeft) + "   " + intToColor(valMid) + "   " + intToColor(valRight));
                 opMode.telemetry.addData("Height", rows);
