@@ -28,9 +28,9 @@
  */
 
 package org.firstinspires;
-/**
-        *In this section we import  imu ,Autonomous ,LinearOpMode Servo and ElapsedTime
-*/
+/*
+ *In this section we import  imu ,Autonomous ,LinearOpMode Servo and ElapsedTime
+ */
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -44,7 +44,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
-/**
+/*
  * we set up the name of the Autonomous
  */
 @Autonomous(name="Red_side_Foundation Autonomous", group="Pushbot")
@@ -88,13 +88,12 @@ Red_side_fundationAutonomous extends LinearOpMode  {
         leftSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         middleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-/**
+/*
  * we send motors imu and distance sensors
  */
 
         waitForStart();
-/**
- *
+/*
  * we set up the path
  */
 
@@ -114,7 +113,7 @@ Red_side_fundationAutonomous extends LinearOpMode  {
 
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 500)
+            while(runtime.milliseconds() < 200)
             {
                 leftSide.setPower(powerFactor);
                 rightSide.setPower(powerFactor);
@@ -129,7 +128,7 @@ Red_side_fundationAutonomous extends LinearOpMode  {
             while(runtime.milliseconds() < 500){ }
 
 
-            leftExpantion.setPosition(0);
+//            leftExpantion.setPosition(0);
             fundationHolder.setPosition(0);
 
 
@@ -168,10 +167,10 @@ Red_side_fundationAutonomous extends LinearOpMode  {
 
             distanceRange[0] = 100 ;
             distanceRange[1] = 100 ;
-            ad.setPosition(new Location(1800, 500*side),
+            ad.setPosition(new Location(1900, 500*side),
                     90, distanceRange, 300, 10, 30, 0.5, 300, 5000);
 
-            leftExpantion.setPosition(0);
+            fundationHolder.setPosition(0);
 
        //     ad.stopAllAutoCalculations();
             runtime.reset();
@@ -182,8 +181,9 @@ Red_side_fundationAutonomous extends LinearOpMode  {
             stop();
         }
         catch (Exception e)
-        { telemetry.addData("error:",e.getStackTrace());
-            ad.stopAllAutoCalculations();}
-        stop();
+        {
+            telemetry.addData("error:",e.getStackTrace());
+            ad.stopAllAutoCalculations();
+        }
     }
 }

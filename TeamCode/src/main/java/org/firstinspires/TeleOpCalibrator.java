@@ -43,8 +43,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name="Basic: Teleop", group="Linear Opmode")
-public class Teleop extends LinearOpMode {
+@TeleOp(name="TeleOp Calibrator", group="AutonomousTest")
+public class TeleOpCalibrator extends LinearOpMode {
 
 
     /**
@@ -83,22 +83,12 @@ public class Teleop extends LinearOpMode {
     double leftPower;
     double rightPower;
     double middlePower;
-    DcMotor left_stone;
-    DcMotor right_stone;
-    boolean rdown = false;
-    boolean ldown = false;
-
-    ElapsedTime gripperTime = new ElapsedTime();
-
 
 
 
     @Override
     public void runOpMode() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-/**
+        /**
  * init the components
  */
         robot.init(hardwareMap);
@@ -111,8 +101,6 @@ public class Teleop extends LinearOpMode {
         gripperServo = robot.gripperServo;
         fundationHolder = robot.fundationHolder;
         imu = robot.imu;
-        left_stone = robot.left_stone;
-        right_stone = robot.right_stone;
         //   parkingMotor = robot.parkingMotor;
 
 /**
@@ -129,6 +117,12 @@ public class Teleop extends LinearOpMode {
         isGripperPressed = false;
         isLiftDownPressed = false;
         isLiftUpPressed = false;
+
+        ActiveLocation al = new ActiveLocation(leftSide, rightSide, middleMotor, imu, new Location(-620, 0));
+        al.oppositeCalculation();
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
         waitForStart();
         runtime.reset();
 /** create/init  the threads for the teleop
@@ -143,6 +137,8 @@ public class Teleop extends LinearOpMode {
         leftSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         middleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        al.run();
 
         while (opModeIsActive()) {
             /**
@@ -274,66 +270,24 @@ public class Teleop extends LinearOpMode {
 
 /**
  * opening and closing the expantion
- *//*
-            if (gamepad2.left_bumper) {
-                left_stone.setPower(-.5);
-                //right_stone.setPower(-.5);
-            } else if (gamepad2.right_bumper) {
-                //left_stone.setPower(.5);
-                right_stone.setPower(.5);
-            }*/
-            double x = .2;
-
-            if (gamepad2.left_trigger>x){
-                gripperTime.reset();
-
-                if (ldown){
-                    while(gripperTime.milliseconds()<500) {
-                        left_stone.setPower(-.5);
-                    }
-                    left_stone.setPower(0);
-                    gripperTime.reset();
-                    ldown=!ldown;
-                }else {
-                    while (gripperTime.milliseconds()<500){
-                        left_stone.setPower(.5);
-                    }
-                    left_stone.setPower(0);
-                    ldown=!ldown;
-                    gripperTime.reset();
-
-                }
-            }else if (gamepad2.right_trigger>x){
-                gripperTime.reset();
-                if (rdown){
-                    while(gripperTime.milliseconds()<500) {
-                        right_stone.setPower(.5);
-                    }
-                    right_stone.setPower(0);
-                    rdown=!rdown;
-                }else {
-                    gripperTime.reset();
-                    while (gripperTime.milliseconds()<500){
-                        right_stone.setPower(-.5);
-                    }
-                    right_stone.setPower(0);
-                    rdown=!rdown;
-
-                }
+ */
+            if (gamepad1.left_bumper) {
+                robot.rightExpantion.setPosition(0);
+                robot.leftExpantion.setPosition(1);
+            } else if (gamepad1.right_bumper) {
+                robot.leftExpantion.setPosition(0);
+                robot.rightExpantion.setPosition(1);
             }
-
-
-
 
 /**
  *opening and closing the roller griper
  */
             if (gamepad2.x && rollerGriperIsOpen && !isGripperPressed) {
-                gripperServo.setPosition(.5);//close
+                gripperServo.setPosition(1);//close
                 rollerGriperIsOpen = false;
                 isGripperPressed = true;
             } else if (gamepad2.x && !rollerGriperIsOpen && !isGripperPressed) {
-                gripperServo.setPosition(0);
+                gripperServo.setPosition(0.45);
                 rollerGriperIsOpen = true;
                 isGripperPressed = true;
             } else if (!gamepad2.x) {
@@ -379,15 +333,11 @@ public class Teleop extends LinearOpMode {
             } else if (!gamepad2.y) {
                 isClawPressed = false;
             }
-
 /**
  * open and close the parkingMotor
  */
-
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("angle", gyroAngle);
-            telemetry.addData("filed-orientated: ", fieldOrientatedDrive);
-            telemetry.addData("level: ", level);
+            telemetry.addData("X", al.getX_Axis());
+            telemetry.addData("Y", al.getY_Axis());
             telemetry.update();
         }
     }
@@ -459,6 +409,6 @@ public class Teleop extends LinearOpMode {
         double     DRIVE_GEAR_REDUCTION    = 20 ;
         double     WHEEL_DIAMETER_MM   = 90 ;
         return -((distance * DRIVE_GEAR_REDUCTION  * 28.5)/ (WHEEL_DIAMETER_MM * Math.PI));
-
     }
+
 }

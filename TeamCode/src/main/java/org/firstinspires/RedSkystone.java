@@ -22,7 +22,7 @@ public class RedSkystone extends LinearOpMode {
                 new Location(0, 0)
         );
 
-        autonomous.move(20 * 25.4, -6 * 25.44);
+        autonomous.move(-6 * 25.4, 20 * 25.4);
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
         while (runtime.milliseconds() < 10000){}
