@@ -67,15 +67,15 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
     public final int side = -1 ; // blue -1
     double[] distanceRange;
 
-    private  AutoDrivingSecondTry ad;
-    private ActiveLocation al;
+    private static AutoDrivingSecondTry ad;
+    //private ActiveLocation al; //changed, as well as commented out lne below
     @Override
 
     public void runOpMode() {
-        al = new ActiveLocation(leftSide, rightSide, middleMotor, imu, new Location(-620, 0));
-/*
- * we init parts from Hardware
- */
+        //       al = new ActiveLocation(leftSide, rightSide, middleMotor, imu, new Location(-620, 0));
+        /*
+         * we init parts from Hardware
+         */
         distanceRange = new double[2];
 
         robot.init(hardwareMap);
@@ -84,7 +84,7 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
         fundationHolder = robot.fundationHolder;
         sideDistanceSensor = robot.sideDistanceSensor;
         frontDistanceSensor = robot.frontDistanceSensor;
-       leftSide = robot.leftDrive;
+        leftSide = robot.leftDrive;
         rightSide = robot.rightDrive;
         middleMotor = robot.middleDrive;
 
@@ -107,9 +107,15 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
                 ad = new AutoDrivingSecondTry(robot.leftDrive, robot.rightDrive, robot.middleDrive,
                         robot.imu, telemetry, this, frontDistanceSensor, sideDistanceSensor, new Location(-620,0));
             }
+            runtime = new ElapsedTime(); //added
+            while(runtime.milliseconds()<500){}//added
 
+            distanceRange[0]= 70;
+            distanceRange[1] = 70;//added
             ad.setPosition(new Location(side*350, side*800),
-                    0, 70, 200, 5, 0, powerFactor);
+                    0, distanceRange, 200, 5, 30, powerFactor,200);
+
+
 
 
             runtime = new ElapsedTime();
@@ -135,10 +141,12 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
             while(runtime.milliseconds() < 1000){ }
 
 
-            ad.DriveToWall(0*side, 5, 0, powerFactor, 250);
+            ad.DriveToWall(0*side, 5, 30, powerFactor, 250);
 
             //test
-            ad.setPosition(new Location(side*600,side*600 ) ,-90, 70 ,300 ,5 ,10 ,powerFactor ,3000);
+            distanceRange[0] = 150;
+            distanceRange[1] = 150; //Added
+            ad.setPosition(new Location(side*600,side*600 ) ,-90, distanceRange ,300 ,5 ,10 ,powerFactor,200, 7000); //Change to 700?
             //    ad.setPosition(new Location(700, 400), 0 , 50 ,300 ,10 ,20 ,0.5);
 
 
@@ -154,7 +162,7 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
             rightSide.setPower(0);
 
             runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 1500){}
+            while(runtime.milliseconds() < 500){} //changed from 1500 to 500
 
             ad.updateXAxis(-465);
 
@@ -168,22 +176,23 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
             distanceRange[0] = 100;
             distanceRange[1] = 100;
             telemetry.addData("Moved", "false");
-            ad.setPosition(new Location(side * 1900, 500*side),
+            ad.setPosition(new Location(side*1900, 500*side),
                     -90, distanceRange, 200, 10, 0, 1, 200, 5000);
             telemetry.addData("Moved", "true");
             telemetry.update();
+            fundationHolder.setPosition(0); //changed
 
             runtime.reset();
             while (runtime.milliseconds() < 1000)
                 middleMotor.setPower(-1);
             middleMotor.setPower(0);
 
-          //  ad.stopAllAutoCalculations();
+            //  ad.stopAllAutoCalculations();
             Teleop.angle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - 180;
             stop();
         }
         catch (Exception e)
-        { telemetry.addData("error:",e.getStackTrace().toString());
+        { telemetry.addData("error:",e.getStackTrace()/*.toString()*/);//changed
             ad.stopAllAutoCalculations();}
     }
 

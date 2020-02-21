@@ -118,7 +118,7 @@ public class Teleop extends LinearOpMode {
 /**
  * create more variables
  */
-        boolean manualControl = false;
+        boolean manualControl = true;
         boolean fieldOrientatedDrive = false;
         boolean foundationHolderIsOpened = false;
         driveToPosition = false;
