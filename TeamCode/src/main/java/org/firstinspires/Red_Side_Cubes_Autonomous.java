@@ -1,7 +1,5 @@
 package org.firstinspires;
 
-import android.util.Log;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.Location;
 
 
 @Autonomous(name="Red_Side_Cubes_Autonomous", group="Pushbot")
@@ -48,7 +45,6 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
     private double speed = 0.6;
 
     @Override
-
     public void runOpMode() {
 /**
  * we init parts from Hardware
@@ -87,7 +83,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
  */
         try {
 
-            cubePostion = ((cubeLocation) * stoneSize) - 140;
+            cubePostion = ((cubeLocation+3) * stoneSize) - 250;
 
             ad.setPosition(new Location(cubePostion, -600),
                     0, 50, 100, 5, 50, speed);
@@ -112,7 +108,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
 //            gripperMotor.setPower(1);
             runtime.reset();
             while(runtime.milliseconds() < 1000) {
-                leftStone.setPower(-0.5);
+                leftStone.setPower(0.5);
             }
             leftStone.setPower(0);
 
@@ -139,46 +135,46 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
                     0, 50, 100, 5, 50, speed);
 
 
-            ad.setPosition(new Location(2000, -200),
+            ad.setPosition(new Location(2600, -200),
                     -90, 100, 100, 5, 30, speed);
 
 
             ///////////////////////////////////////////////////////////////////////////////
             runtime.reset();
             while(runtime.milliseconds() < 500) {
-                leftStone.setPower(0.5);
-            }
-            leftStone.setPower(0);
-
-            ////////////////////////////////////////////////////////////////////////////////////
-            cubePostion = ((cubeLocation+3) * stoneSize)-100;
-
-            ad.setPosition(new Location(cubePostion, -600),
-                    0, 70, 100, 5, 50, speed);
-
-
-
-
-            runtime = new ElapsedTime();
-            while(runtime.milliseconds() < 800)
-            {
-                leftSide.setPower(0.5);
-                rightSide.setPower(0.5);
-            }
-
-
-            leftSide.setPower(0);
-            rightSide.setPower(0);
-
-            runtime.reset();
-            while(runtime.milliseconds() < 1000) {
                 leftStone.setPower(-0.5);
             }
             leftStone.setPower(0);
 
-            ad.setPosition(new Location(cubePostion, -200),
-                    0, 50, 100, 5, 50, speed);
-
+            ////////////////////////////////////////////////////////////////////////////////////
+//            cubePostion = ((cubeLocation) * stoneSize)-250;
+//
+//            ad.setPosition(new Location(cubePostion, -600),
+//                    0, 70, 100, 5, 50, speed);
+//
+//
+//
+//
+//            runtime = new ElapsedTime();
+//            while(runtime.milliseconds() < 800)
+//            {
+//                leftSide.setPower(0.5);
+//                rightSide.setPower(0.5);
+//            }
+//
+//
+//            leftSide.setPower(0);
+//            rightSide.setPower(0);
+//
+//            runtime.reset();
+//            while(runtime.milliseconds() < 1000) {
+//                leftStone.setPower(0.5);
+//            }
+//            leftStone.setPower(0);
+//
+//            ad.setPosition(new Location(cubePostion, -200),
+//                    0, 50, 100, 5, 50, speed);
+//
 
             ad.setPosition(new Location(2400, -100),
                     -90, 100, 100, 5, 30, speed);
@@ -187,7 +183,7 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
 
             runtime.reset();
             while(runtime.milliseconds() < 500) {
-                leftStone.setPower(0.5);
+                leftStone.setPower(-0.5);
             }
             leftStone.setPower(0);
 
@@ -245,6 +241,6 @@ public class Red_Side_Cubes_Autonomous extends LinearOpMode {
         } catch (Exception e) {
             telemetry.addData("error:", e.getStackTrace().toString());
         }
-        stop();
+
     }
 }
