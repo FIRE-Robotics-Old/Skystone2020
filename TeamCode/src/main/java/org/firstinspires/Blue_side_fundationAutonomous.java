@@ -92,6 +92,9 @@ Blue_side_fundationAutonomous extends LinearOpMode  {
         leftSide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         middleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
+
+
 /**
  * we send motors imu and distance sensors
  */
