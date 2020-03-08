@@ -52,8 +52,9 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
         //public DcMotor right_stone = null;
         //public DcMotor left_stone = null;
 
-/*
+
         public Servo fundationHolder = null;
+        /*
         public Servo leftExpantion = null;
         public Servo rightExpantion = null;
         public Servo fourbarServo = null;
@@ -106,7 +107,9 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
             clawServo = hwMap.get(Servo.class, "claw_servo");
             gripperServo = hwMap.get(Servo.class ,"gripper_servo");
             liftSensor = hwMap.get(DistanceSensor.class, "lift_sensor");
+            */
             fundationHolder = hwMap.get(Servo.class, "foundation_holder");
+            /*
             frontDistanceSensor = hwMap.get(DistanceSensor.class, "front_distance_sensor");
             sideDistanceSensor = hwMap.get(DistanceSensor.class, "side_distance_sensor");
 */

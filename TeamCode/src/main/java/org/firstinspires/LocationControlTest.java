@@ -91,7 +91,7 @@ public class LocationControlTest extends LinearOpMode  {
         robot.init(hardwareMap);
 
         imu = robot.imu;
-        //fundationHolder = robot.fundationHolder;
+        fundationHolder = robot.fundationHolder;
         //sideDistanceSensor = robot.sideDistanceSensor;
         //frontDistanceSensor = robot.frontDistanceSensor;
         leftSide = robot.leftDrive;
@@ -147,7 +147,7 @@ public class LocationControlTest extends LinearOpMode  {
             while(runtime.milliseconds() < 500){ }
 
 
-            //fundationHolder.setPosition(0);
+            fundationHolder.setPosition(0);
 
 
             runtime = new ElapsedTime();
@@ -179,7 +179,7 @@ public class LocationControlTest extends LinearOpMode  {
 
             ad.updateXAxis(-465);
 
-            //fundationHolder.setPosition(1);
+            fundationHolder.setPosition(1);
 
             runtime = new ElapsedTime();
             while(runtime.milliseconds() < 500){}
